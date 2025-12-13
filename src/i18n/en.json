@@ -1,0 +1,41 @@
+{
+  "page": {
+    "title": {
+      "signin": "Login",
+      "signup": "Register"
+    }
+  },
+  "signup": {
+    "error": {
+      "username": {
+        "invalid_chars": "Invalid charaters",
+        "start_end_char": "Start or end charater must not _ or ."
+      },
+      "email": {
+        "invalid": "Invalid email"
+      },
+      "password": {
+        "invalid": "Invalid password",
+        "weak": "Weak",
+        "good": "Good",
+        "fair": "Fair",
+        "strong": "Strong",
+        "not_match": "Password not match"
+      }
+    },
+    "submit": "Submit",
+    "submiting": "Submiting",
+    "complete": "Registration complete!",
+    "to_login": "Login now"
+  },
+  "fakebook": {
+    "newsfeed": {
+      "title": "Newsfeed",
+      "editor_placeholder": "What's on your mind?",
+      "editor_new_btn": "New",
+      "editor_newPostTitle": "New Post",
+      "editor_newPostPlaceholder": "Write something...",
+      "editor_newPostSubmitBtn": "Post"
+    }
+  }
+}

@@ -1,0 +1,191 @@
+[
+  {
+    "id": "post_001",
+    "author": {
+      "id": "user_001",
+      "displayName": "Nguyễn Văn A",
+      "avatarUrl": "/sample/avatar/6.png",
+      "jobTitle": "Software Engineer",
+      "verified": true
+    },
+    "content": "Hôm nay trời đẹp quá, đi cà phê cùng bạn bè ☕️🌞",
+    "media": [
+      {
+        "id": "media_001",
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200"
+      }
+    ],
+    "createdAt": "2025-08-15T09:30:00",
+    "reactions": [
+      {
+        "userId": "user_002",
+        "type": "like"
+      },
+      {
+        "userId": "user_003",
+        "type": "love"
+      }
+    ],
+    "comments": [
+      {
+        "id": "comment_001",
+        "author": {
+          "id": "user_002",
+          "displayName": "Trần Thị B",
+          "avatarUrl": "/sample/avatar/3.png",
+          "jobTitle": "Designer"
+        },
+        "content": "Đúng rồi, nắng nhẹ đẹp quá ☀️",
+        "createdAt": "2025-08-15T10:00:00",
+        "reactions": [
+          {
+            "userId": "user_001",
+            "type": "like"
+          }
+        ],
+        "repliesCount": 1,
+        "replies": [
+          {
+            "id": "reply_001",
+            "author": {
+              "id": "user_003",
+              "displayName": "Phạm Văn C",
+              "avatarUrl": "/sample/avatar/2.png",
+              "jobTitle": "Photographer"
+            },
+            "content": "Lần tới đi cùng cho vui nhé 😄",
+            "createdAt": "2025-08-15T10:15:00",
+            "reactions": [
+              {
+                "userId": "user_002",
+                "type": "haha"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "comment_002",
+        "author": {
+          "id": "user_002",
+          "displayName": "Trần Thị B",
+          "avatarUrl": "/sample/avatar/3.png",
+          "jobTitle": "Designer"
+        },
+        "content": "Đúng rồi, nắng nhẹ đẹp quá ☀️",
+        "createdAt": "2025-08-15T10:00:00",
+        "reactions": [
+          {
+            "userId": "user_001",
+            "type": "like"
+          }
+        ],
+        "repliesCount": 1,
+        "replies": [
+          {
+            "id": "reply_001",
+            "author": {
+              "id": "user_003",
+              "displayName": "Phạm Văn C",
+              "avatarUrl": "/sample/avatar/2.png",
+              "jobTitle": "Photographer"
+            },
+            "content": "Lần tới đi cùng cho vui nhé 😄",
+            "createdAt": "2025-08-15T10:15:00",
+            "reactions": [
+              {
+                "userId": "user_002",
+                "type": "haha"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "comment_003",
+        "author": {
+          "id": "user_002",
+          "displayName": "Trần Thị B",
+          "avatarUrl": "/sample/avatar/3.png",
+          "jobTitle": "Designer"
+        },
+        "content": "Đúng rồi, nắng nhẹ đẹp quá ☀️",
+        "createdAt": "2025-08-15T10:00:00",
+        "reactions": [
+          {
+            "userId": "user_001",
+            "type": "like"
+          }
+        ],
+        "repliesCount": 1,
+        "replies": [
+          {
+            "id": "reply_001",
+            "author": {
+              "id": "user_003",
+              "displayName": "Phạm Văn C",
+              "avatarUrl": "/sample/avatar/2.png",
+              "jobTitle": "Photographer"
+            },
+            "content": "Lần tới đi cùng cho vui nhé 😄",
+            "createdAt": "2025-08-15T10:15:00",
+            "reactions": [
+              {
+                "userId": "user_002",
+                "type": "haha"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "shareCount": 2,
+    "privacy": "public",
+    "isShared": false
+  },
+  {
+    "id": "post_002",
+    "author": {
+      "id": "user_004",
+      "displayName": "Lê Mỹ D",
+      "avatarUrl": "/sample/avatar/2.png",
+      "jobTitle": "Content Creator",
+      "verified": false
+    },
+    "content": "Check out my new travel vlog! ✈️🌍",
+    "media": [
+      {
+        "id": "media_002",
+        "type": "video",
+        "url": "/sample/post/sample.mp4",
+        "thumbnailUrl": "/sample/avatar/2.png"
+      }
+    ],
+    "createdAt": "2025-08-16T18:45:00",
+    "reactions": [
+      {
+        "userId": "user_001",
+        "type": "wow"
+      }
+    ],
+    "comments": [],
+    "shareCount": 5,
+    "privacy": "friends",
+    "isShared": true,
+    "sharedFrom": {
+      "id": "post_001",
+      "author": {
+        "id": "user_001",
+        "displayName": "Nguyễn Văn A",
+        "avatarUrl": "/sample/avatar/4.png",
+        "jobTitle": "Software Engineer",
+        "verified": true
+      },
+      "content": "Hôm nay trời đẹp quá, đi cà phê cùng bạn bè ☕️🌞",
+      "createdAt": "2025-08-15T09:30:00",
+      "privacy": "public"
+    }
+  }
+]
