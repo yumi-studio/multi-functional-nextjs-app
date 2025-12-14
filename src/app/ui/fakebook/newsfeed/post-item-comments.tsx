@@ -1,13 +1,13 @@
 "use client";
 
-import { Comment, CommentStatistic, ReactionType } from "@/app/lib/fakebook/definitions";
+import { Comment, ReactionType } from "@/app/lib/fakebook/definitions";
 import { commentService } from "@/app/services/fakebook/comment.service";
 import { postService } from "@/app/services/fakebook/post.service";
 import { useFakebookStore } from "@/app/stores/fakebook-store";
 import { SimpleDialog } from "@/app/ui/dialogs";
-import { faClose, faEllipsisVertical, faPenToSquare, faReply, faThumbsDown, faThumbsUp, faTrash, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faEllipsisVertical, faPenToSquare, faThumbsDown, faThumbsUp, faTrash, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Grid, Input, Skeleton, TextareaAutosize } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import Image from "next/image";
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PostCommentEditor from "./post-comment-editor";
@@ -21,7 +21,7 @@ type PostCommentOptionsProp = {
 type PostCommentProp = {
   comment: Comment;
   isReply: boolean;
-  reloadStatistic: (id: string) => Promise<void>;
+  changeReaction: (id: string, reaction: ReactionType) => Promise<void>;
 }
 
 function CommentSkeleton() {
@@ -59,28 +59,13 @@ function CommentSkeleton() {
   );
 }
 
-function PostComment({ comment, isReply = false, reloadStatistic }: PostCommentProp) {
-  const [statistic, setStatistic] = useState<CommentStatistic>(comment.statistic);
-  const [loadReplies, setLoadReplies] = useState(false);
-  const [reaction, setReaction] = useState<ReactionType | null>(null);
-
-  const handleReaction = async (type: ReactionType) => {
-    const { success } = await commentService.reactComment({ id: comment.id, type: type });
-    if (success) {
-      reloadStatistic(comment.id);
-    }
-  }
-
+function PostComment({ comment, isReply = false, changeReaction }: PostCommentProp) {
   const handleEdit = () => {
   };
   const handleDelete = async () => {
   };
   const handleReport = () => {
   }
-
-  useEffect(() => {
-    setStatistic(comment.statistic);
-  }, [comment.statistic]);
 
   return (
     <div className="comment flex items-start gap-2 mb-3 text-[0.875rem]">
@@ -102,15 +87,15 @@ function PostComment({ comment, isReply = false, reloadStatistic }: PostCommentP
         <div className="comment-bottom flex gap-1">
           <span
             className="react-up-count inline-block rounded-full bg-gray-200 px-2 text-[0.875rem] cursor-pointer"
-            onClick={e => handleReaction(1)}
+            onClick={e => changeReaction(comment.id, 1)}
           >
-            <FontAwesomeIcon className="" icon={faThumbsUp} color={reaction === 1 ? "blue" : ""} />&nbsp;{statistic.reactions.upvote}
+            <FontAwesomeIcon className="" icon={faThumbsUp} color={comment.reaction === 1 ? "blue" : ""} />&nbsp;{comment.statistic.reactions.upvote}
           </span>
           <span
             className="react-down-count inline-block rounded-full bg-gray-200 px-2 text-[0.875rem] cursor-pointer"
-            onClick={e => handleReaction(2)}
+            onClick={e => changeReaction(comment.id, 2)}
           >
-            <FontAwesomeIcon className="" icon={faThumbsDown} color={reaction === 2 ? "blue" : ""} />&nbsp;{statistic.reactions.downvote}
+            <FontAwesomeIcon className="" icon={faThumbsDown} color={comment.reaction === 2 ? "blue" : ""} />&nbsp;{comment.statistic.reactions.downvote}
           </span>
           {/* {!isReply && (
             <span
@@ -176,6 +161,7 @@ const PostCommentOptions = memo(
 // }
 
 export default function PostItemComments() {
+  const [loadMore, setLoadMore] = useState(true);
   const [pager, setPager] = useState<{ before: Date | null; hasMore: boolean }>({
     before: null,
     hasMore: true
@@ -201,23 +187,6 @@ export default function PostItemComments() {
     }
   }, [commentsRef]);
 
-  const loadComments = async () => {
-    if (!currentPost) return;
-    if (!pager.hasMore) return;
-    setLoading(true);
-    const { success, data } = await postService.getCommentsByPage({
-      postId: currentPost.id,
-      before: pager.before ?? new Date(),
-      limit: 3
-    });
-    if (success && data) {
-      setPager(prev => { return { ...prev, before: data.next, hasMore: !!data.next } });
-      setComments(prev => { return [...prev, ...data.items] });
-      setLoading(false);
-      scrollToBottom();
-    }
-  }
-
   const saveComment = useCallback(async (content: string) => {
     if (!currentPost?.id) return;
     const createRes = await postService.createComment({ content: content, postId: currentPost.id });
@@ -225,41 +194,57 @@ export default function PostItemComments() {
     const detailRes = await commentService.getComment({ id: createRes.data.id });
     if (!detailRes.success || !detailRes.data) return;
     setComments(prev => {
-      const data = detailRes.data as Comment;
+      const data = detailRes.data;
       return [data, ...prev];
     });
     scrollToTop();
-  }, [currentPost?.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPost]);
 
-  const reloadStatistic = useCallback(async (id: string) => {
-    const { success, data } = await commentService.getStatistic({ id });
-    if (success && data) {
-      setComments(prev => {
-        const _tmp: Comment[] = prev.map(comment => {
-          return comment.id === id ? { ...comment, statistic: data } : comment
-        });
+  const changeReaction = async (id: string, reaction: ReactionType) => {
+    const reactRes = await commentService.reactComment({ id, type: reaction });
+    if (!reactRes.success) return;
+    const statisticRes = await commentService.getStatistic({ id });
+    if (!reactRes.success) return;
 
-        return _tmp;
-      });
-    }
-  }, [setComments]);
+    setComments(prev => prev.map(comment => {
+      return comment.id === id ? {
+        ...comment,
+        statistic: statisticRes.data,
+        reaction: comment.reaction === reaction ? 0 : reaction
+      } : comment
+    }));
+  }
 
   const commentEditor = useMemo(() => {
     return <PostCommentEditor saveComment={saveComment} />
   }, [saveComment]);
 
   useEffect(() => {
-    if (currentPost) {
-      loadComments();
-    } else {
-      setComments([]);
-      setPager({ before: null, hasMore: true });
-    }
+    setLoadMore(true);
+  }, []);
 
-    return () => {
-    }
+  useEffect(() => {
+    if (!loadMore) return;
+    if (!currentPost) return;
+    if (!pager.hasMore) return;
+    setLoading(true);
+    (async () => {
+      const { success, data } = await postService.getCommentsByPage({
+        postId: currentPost.id,
+        before: pager.before ?? new Date(),
+        limit: 3
+      });
+      if (success && data) {
+        setPager(prev => { return { ...prev, before: data.next, hasMore: !!data.next } });
+        setComments(prev => { return [...prev, ...data.items] });
+        setLoading(false);
+        setLoadMore(false);
+        scrollToBottom();
+      }
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPost]);
+  }, [currentPost, loadMore]);
 
   if (!currentPost || !currentPost?.id) return;
 
@@ -276,7 +261,7 @@ export default function PostItemComments() {
         <div className="bg-gray-300 h-[1px] my-3"></div>
         <div className="comments flex-auto overflow-auto" ref={commentsRef}>
           {comments && comments.map(comment => (
-            <PostComment key={comment.id} comment={comment} isReply={false} reloadStatistic={reloadStatistic} />
+            <PostComment key={comment.id} comment={comment} isReply={false} changeReaction={changeReaction} />
           ))}
           {loading && (
             <>
@@ -285,7 +270,7 @@ export default function PostItemComments() {
           )}
           {pager.hasMore && (
             <div className="text-center">
-              <Button type="button" variant="text" onClick={() => loadComments()}>Load more...</Button>
+              <Button type="button" variant="text" onClick={() => setLoadMore(true)}>Load more...</Button>
             </div>
           )}
         </div>

@@ -1,15 +1,16 @@
 "use client";
 
-import { Post, PostCreatePayload, UploadMediaFile } from "@/app/lib/fakebook/definitions";
+import { UploadMediaFile } from "@/app/lib/fakebook/definitions";
 import { postService } from "@/app/services/fakebook/post.service";
 import { FakebookState, useFakebookStore } from "@/app/stores/fakebook-store";
 import { SimpleDialog } from "@/app/ui/dialogs";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
-import { faAdd, faArrowLeft, faClose, faTrash, faVideo } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faTrash, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { MouseEvent, TouchEvent, use, useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import SimpleGalleryViewer, { GalleryItem } from "@/app/ui/simple-gallery-viewer";
 
 export default function PostCreate() {
   const t = useTranslations("fakebook.newsfeed");
@@ -24,15 +25,8 @@ export default function PostCreate() {
 
   const [content, setContent] = useState<string>("");
   const [mediaFiles, setMediaFiles] = useState<UploadMediaFile[]>([]);
-  const [viewerState, setViewerState] = useState({ currentIndex: 0, viewerWidth: 0 });
-  const viewerToPrev = useCallback(() => {
-    setViewerState(prev => ({ ...prev, currentIndex: Math.max(prev.currentIndex - 1, 0) }));
-  }, []);
-  const viewerToNext = useCallback(() => {
-    setViewerState(prev => ({ ...prev, currentIndex: Math.min(prev.currentIndex + 1, mediaFiles.length - 1) }));
-  }, []);
-  
-  const addNewMediaFile = useCallback(() => {
+
+  const addNewMediaFile = () => {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = "image/*,video/*";
@@ -52,8 +46,8 @@ export default function PostCreate() {
       }
     };
     fileInput.click();
-  }, []);
-  const removeMediaFile = useCallback((index: number) => {
+  };
+  const removeMediaFile = (index: number) => {
     setMediaFiles(prev => {
       const target = prev[index];
       if (target) {
@@ -61,8 +55,8 @@ export default function PostCreate() {
       }
       return prev.filter((_, i) => i !== index);
     });
-  }, []);
-  const handlePostSubmit = useCallback(async () => {
+  };
+  const handlePostSubmit = async () => {
     // Handle post submission logic here
     const uploadMediaPromises = mediaFiles.map(file => postService.uploadMedia(file));
     const uploadMediaResponse = await Promise.all(uploadMediaPromises);
@@ -80,19 +74,7 @@ export default function PostCreate() {
         setNewPostModalOpen(false);
       }
     }
-  }, [mediaFiles, content]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const update = () => setViewerState(prev => ({ ...prev, viewerWidth: window.innerWidth }));
-      update();
-      window.addEventListener("resize", update);
-
-      return () => {
-        window.removeEventListener("resize", update);
-      }
-    }
-  }, []);
+  };
 
   return (
     <SimpleDialog open={newPostModalOpen} onClose={onClose}>
@@ -157,36 +139,13 @@ export default function PostCreate() {
             ))}
           </div>
           {newPostMediaPreviewOpen && (
-            <div className="media-preview absolute top-0 left-0 w-full h-full bg-black">
-              <div className="preview-header flex items-center p-3 absolute top-0 left-0 right-0 z-999 bg-[rgba(0,0,0,0.5)]">
-                <button onClick={() => { setNewPostMediaPreviewOpen(false) }} type="button"><FontAwesomeIcon icon={faArrowLeft} width={"1rem"} height={"1rem"} color="white" /></button>
-                <div className="ml-auto inline-flex gap-2">
-                  <button type="button" className="px-3 py-1 border border-white rounded-sm text-white"
-                    onClick={viewerToPrev}>Prev</button>
-                  <button type="button" className="px-3 py-1 border border-white rounded-sm text-white"
-                    onClick={viewerToNext}>Next</button>
-                </div>
-              </div>
-              <div className="preview-inner w-full h-full overflow-hidden">
-                <div className="preview-track inline-block whitespace-nowrap h-full w-max" style={{
-                  transform: `translateX(-${viewerState.currentIndex * window.innerWidth}px)`,
-                  transition: "transform 0.3s ease-in-out",
-                }}>
-                  {mediaFiles.map((item, index) => (
-                    <div className="preview-item inline-block h-full w-svw overflow-hidden relative" key={index}>
-                      {item.type === "image" && (
-                        <Image src={item.preview_url} alt={item.file.name} width={window.innerWidth} height={window.innerHeight}
-                          className="object-contain h-full w-full"
-                        />
-                      )}
-                      {item.type === "video" && (
-                        <video className="object-contain h-full w-full" src={item.preview_url} width={window.innerWidth} height={window.innerHeight} controls />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <SimpleGalleryViewer items={mediaFiles.map((mediaFile) => {
+              return {
+                name: mediaFile.file.name,
+                src: mediaFile.preview_url,
+                type: mediaFile.type
+              } as GalleryItem;
+            })} isOpen={newPostMediaPreviewOpen} setIsOpen={setNewPostMediaPreviewOpen} />
           )}
         </form>
       </div>

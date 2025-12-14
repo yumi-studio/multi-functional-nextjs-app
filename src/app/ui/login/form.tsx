@@ -10,13 +10,14 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import SsoForm from "./sso-form";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const redirectPath = searchParams.get("redirect") || "/";
   const t = useTranslations();
-  const setToken = useUserStore(state => state.setToken);
+  const setIsLoggedIn = useUserStore(state => state.setIsLoggedIn);
 
   const [form, setForm] = useState<_LoginForm>({
     username: "",
@@ -38,18 +39,10 @@ export default function LoginForm() {
     });
 
     if (result.success && result.data?.token) {
-      const _token = result.data.token;
-      setToken(_token);
+      setIsLoggedIn(true);
       router.push(redirectPath);
     }
   }
-
-  // if (token) {
-  //   setTimeout(() => router.push(redirectPath), 1000);
-  //   return (
-  //     <div className="bg-white text-gray-900 h-full w-full p-2">Login success. Redirecting...</div>
-  //   )
-  // }
 
   return (
     <div className="m-auto w-[90%] h-auto max-w-80 bg-white px-3 rounded-lg border border-gray-900">
@@ -90,9 +83,10 @@ export default function LoginForm() {
           type="submit">
           {t("page.title.signin")}
         </Button>
-        <div className="text-center">
+        <div className="text-center my-2">
           <span>Need an account?</span><br /><Link href={SIGNUP_URL} className="text-blue-700"><u>Register now!</u></Link>
         </div>
+        <SsoForm />
       </form>
     </div>
   )

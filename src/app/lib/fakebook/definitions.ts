@@ -12,7 +12,7 @@ export type Profile = {
   avatarUrl: string,
 }
 
-export type ReactionType = 1 | 2;
+export type ReactionType = 0 | 1 | 2;
 
 export type Reaction = {
   userId: string;
@@ -38,6 +38,7 @@ export type Comment = {
     avatarUrl: string;
   },
   statistic: CommentStatistic;
+  reaction: ReactionType | null
 };
 
 export type PostMediaType = 'image' | 'video' | 'audio' | 'file';

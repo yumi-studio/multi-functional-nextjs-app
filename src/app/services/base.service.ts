@@ -5,7 +5,7 @@ import apiClient from "./api-client";
 export type Response<T> = {
   success: boolean,
   message: string | null,
-  data: T | null,
+  data: T,
   errors: string[]
 }
 
