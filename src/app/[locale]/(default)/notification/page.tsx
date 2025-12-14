@@ -17,18 +17,9 @@ function urlBase64ToUint8Array(base64String: string) {
 }
 
 function PushNotificationManager() {
-  const [isSupported, setIsSupported] = useState(false)
-  const [subscription, setSubscription] = useState<PushSubscription | null>(
-    null
-  )
-  const [message, setMessage] = useState('')
-
-  useEffect(() => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      setIsSupported(true)
-      registerServiceWorker()
-    }
-  }, [])
+  const [isSupported, setIsSupported] = useState(false);
+  const [subscription, setSubscription] = useState<PushSubscription | null>(null);
+  const [message, setMessage] = useState('');
 
   async function registerServiceWorker() {
     const registration = await navigator.serviceWorker.register('/sw.js', {
@@ -65,6 +56,15 @@ function PushNotificationManager() {
     }
   }
 
+  useEffect(() => {
+    (async () => {
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        setIsSupported(true)
+        registerServiceWorker()
+      }
+    })();
+  }, [])
+
   if (!isSupported) {
     return <p>Push notifications are not supported in this browser.</p>
   }
@@ -99,9 +99,10 @@ function InstallPrompt() {
   const [isStandalone, setIsStandalone] = useState(false)
 
   useEffect(() => {
-    setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent))
-
-    setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
+    (async () => {
+      setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent));
+      setIsStandalone(window.matchMedia('(display-mode: standalone)').matches);
+    })();
   }, [])
 
   if (isStandalone) {

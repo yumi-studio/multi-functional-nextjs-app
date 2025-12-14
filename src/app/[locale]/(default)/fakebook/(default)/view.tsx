@@ -20,7 +20,7 @@ export default function View() {
   const reloadProfiles = async () => {
     const result = await profileService.getProfiles();
     if (result.success && result.data) {
-      setProfiles(result.data);
+      setProfiles(() => result.data ?? []);
     }
   }
 
@@ -50,7 +50,9 @@ export default function View() {
   }
 
   useEffect(() => {
-    reloadProfiles();
+    (async () => {
+      reloadProfiles();
+    })();
   }, []);
 
   return (
@@ -61,10 +63,10 @@ export default function View() {
       </div>
       <div className="p-2">
         {profiles.map((profile) => (
-          <div 
+          <div
             key={profile.id}
             className={`border border-gray-500 ${selectedProfile?.id === profile.id ? "border-l-4" : ""}`
-            + ` rounded-md bg-white p-2 mb-2 `}
+              + ` rounded-md bg-white p-2 mb-2 `}
             onClick={() => onProfileSelect(profile)}>
             <span>{profile.name}</span>
           </div>

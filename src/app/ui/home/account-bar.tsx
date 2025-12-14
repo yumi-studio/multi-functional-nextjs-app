@@ -9,13 +9,13 @@ import { useState } from "react";
 
 export default function AccountBar() {
   const t = useTranslations();
-  const setToken = useUserStore(state => state.setToken);
+  const setIsLoggedIn = useUserStore(state => state.setIsLoggedIn);
   const userDetail = useUserStore(state => state.userDetail);
   const [showLogout, setShowLogout] = useState(false);
 
   const onLogoutConfirm = async () => {
     setShowLogout(false);
-    setToken(null);
+    setIsLoggedIn(false);
   }
 
   const onLogoutCancel = () => {

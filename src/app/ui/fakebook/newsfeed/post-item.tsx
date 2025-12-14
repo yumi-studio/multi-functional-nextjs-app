@@ -1,25 +1,30 @@
 "use client";
 
-import { Post } from "@/app/lib/fakebook/definitions";
+import { Post, ReactionType } from "@/app/lib/fakebook/definitions";
 import { useFakebookStore } from "@/app/stores/fakebook-store";
 import { faTrashCan, faPenToSquare, faFlag } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PostItemFooter from "./post-item-footer";
 import { useAppContext } from "@/app/context/AppContext";
+import SimpleGalleryViewer, { GalleryItem } from "../../simple-gallery-viewer";
 
 export type PostItemProp = {
   post: Post;
-  reloadStatistic: (id: string) => void;
+  changeReaction: (id: string, reaction: ReactionType) => void;
 }
 
-export default function PostItem({ post, reloadStatistic }: PostItemProp) {
+export default function PostItem({ post, changeReaction }: PostItemProp) {
   const [showOptions, setShowOptions] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
   const currentPost = useFakebookStore((state) => state.currentPost);
   const appContext = useAppContext();
+  const footer = useMemo(() => {
+    return <PostItemFooter post={post} changeReaction={changeReaction} />
+  }, [post, changeReaction]);
 
   return (
     <div className={
@@ -68,7 +73,7 @@ export default function PostItem({ post, reloadStatistic }: PostItemProp) {
       <div className="post-body py-3">
         <div className="post-content mb-3">{post.content}</div>
         {post.mediaItems && post.mediaItems.length > 0 && (
-          <div className="post-media flex gap-2 items-stretch justify-center flex-wrap">
+          <div className="post-media flex gap-2 items-stretch justify-center flex-wrap" onClick={() => setShowGallery(true)}>
             {post.mediaItems.map((media) => (
               <div key={media.id} className={`media-item ${media.type} relative`}>
                 {media.type === 'image' && (
@@ -90,7 +95,16 @@ export default function PostItem({ post, reloadStatistic }: PostItemProp) {
           </div>
         )}
       </div>
-      <PostItemFooter post={post} reloadStatistic={reloadStatistic} />
+      {footer}
+      {showGallery && post.mediaItems && post.mediaItems.length > 0 && (
+        <SimpleGalleryViewer items={post.mediaItems.map((item) => {
+          return {
+            name: item.name,
+            src: item.source,
+            type: item.type
+          } as GalleryItem;
+        })} isOpen={showGallery} setIsOpen={setShowGallery} />
+      )}
     </div>
   )
 }
