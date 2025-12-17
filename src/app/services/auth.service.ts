@@ -1,5 +1,5 @@
 import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../lib/definitions";
-import { API_AUTH_LOGIN, API_AUTH_REGISTER } from "./api-endpoints";
+import { API_AUTH_LOGIN, API_AUTH_LOGOUT, API_AUTH_REGISTER } from "./api-endpoints";
 import BaseService, { Response } from "./base.service";
 
 class AuthService extends BaseService {
@@ -16,7 +16,11 @@ class AuthService extends BaseService {
     const result: Response<RegisterResponse> = await this.apiClient.post(API_AUTH_REGISTER, request);
     return result;
   }
-  
+
+  async logout() {
+    const result: Response<{}> = await this.apiClient.post(API_AUTH_LOGOUT);
+    return result;
+  }
 }
 
 export const authService = new AuthService();
