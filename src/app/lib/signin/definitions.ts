@@ -16,6 +16,6 @@ export type LoginFormData = {
 export type LoginFormState = FormState<LoginFormData, LoginFormError>;
 
 export type LoginForm = {
-  username: string,
+  email: string,
   password: string,
 }

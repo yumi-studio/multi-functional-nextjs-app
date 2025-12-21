@@ -1,6 +1,7 @@
 "use client";
 
 import { SIGNIN_URL, SIGNUP_URL } from "@/app/lib/url_paths";
+import { authService } from "@/app/services/auth.service";
 import { useUserStore } from "@/app/stores/user-store";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@mui/material";
@@ -10,12 +11,17 @@ import { useState } from "react";
 export default function AccountBar() {
   const t = useTranslations();
   const setIsLoggedIn = useUserStore(state => state.setIsLoggedIn);
+  const setUserDetail = useUserStore(state => state.setUserDetail);
   const userDetail = useUserStore(state => state.userDetail);
   const [showLogout, setShowLogout] = useState(false);
 
   const onLogoutConfirm = async () => {
     setShowLogout(false);
-    setIsLoggedIn(false);
+    const { success } = await authService.logout();
+    if (success) {
+      setUserDetail(null);
+      setIsLoggedIn(false);
+    }
   }
 
   const onLogoutCancel = () => {

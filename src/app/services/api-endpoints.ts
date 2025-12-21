@@ -5,6 +5,8 @@ const API_V1 = (API_BASEURL.endsWith("/") ? API_BASEURL.substring(0, API_BASEURL
 export const API_AUTH_LOGIN = API_V1 + "/auth/login";
 export const API_AUTH_REGISTER = API_V1 + "/auth/register";
 export const API_AUTH_LOGOUT = API_V1 + "/auth/logout";
+export const API_AUTH_EXTERNAL_PROVIDERS = API_V1 + "/auth/external-providers";
+export const API_AUTH_EXTERNAL_LOGIN = API_V1 + "/auth/login-external/{provider}";
 
 // API User
 export const API_USER_ME = API_V1 + "/users/me";

@@ -10,9 +10,8 @@ export type UserDetail = {
 }
 
 export type LoginRequest = {
-  username: string,
-  password: string,
-  loginType: number
+  email: string,
+  password: string
 }
 
 export type LoginResponse = {
