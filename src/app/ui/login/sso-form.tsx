@@ -1,16 +1,33 @@
 "use client";
 
 import { useAppContext } from "@/app/context/AppContext";
+import { API_AUTH_EXTERNAL_LOGIN } from "@/app/services/api-endpoints";
+import { authService } from "@/app/services/auth.service";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { Button } from "@mui/material";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function SsoForm() {
-  const appCtx = useAppContext();
+	const appCtx = useAppContext();
 	const searchParams = useSearchParams();
-  const redirectPath = searchParams.get("redirect") || "/";
+	const redirectPath = searchParams.get("redirect") || "/";
 	const redirectUrl = new URL(redirectPath, process.env.NEXT_PUBLIC_APP_URL).toString();
-	const loginGoogleUrl = process.env.NEXT_PUBLIC_API_HOST + "/api/v1/auth/login-google?redirect=" + redirectUrl;
+	const [externalAuth, setExternalAuth] = useState<{ [key: number]: string } | null>(null);
+
+	const openAuthWindow = async (url: string) => {
+		window.open(url, "popup");
+	}
+
+	useEffect(() => {
+		(async () => {
+			const { success, data } = await authService.externalProviders();
+			console.log(Object.entries(data));
+			if (success) {
+				setExternalAuth(data);
+			}
+		})();
+	}, []);
 
 	return (
 		<div>
@@ -20,11 +37,11 @@ export default function SsoForm() {
 				<div className="h-[1px] bg-gray-400 flex-auto"></div>
 			</div>
 			<div className="flex flex-col gap-3 mb-3">
-				<Link href={loginGoogleUrl}>
-					<Button type="button" size="small" variant="outlined" fullWidth>Google</Button>
-				</Link>
-				<Button type="button" size="small" variant="outlined" fullWidth onClick={() => appCtx.alertInDevelop()}>Facebook</Button>
-				<Button type="button" size="small" variant="outlined" fullWidth onClick={() => appCtx.alertInDevelop()}>Microsoft</Button>
+				{externalAuth && Object.entries(externalAuth).map(entry => (
+					<Link href={API_AUTH_EXTERNAL_LOGIN.replace("{provider}", entry[0]) + "?redirect=" + redirectUrl} key={entry[0]}>
+						<Button type="button" size="small" variant="outlined" fullWidth>{entry[1]}</Button>
+					</Link>
+				))}
 			</div>
 		</div>
 	)

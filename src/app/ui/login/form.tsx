@@ -5,7 +5,7 @@ import { SIGNUP_URL } from "@/app/lib/url_paths";
 import { authService } from "@/app/services/auth.service";
 import { useUserStore } from "@/app/stores/user-store";
 import { useRouter } from "@/i18n/navigation";
-import { Button } from "@mui/material";
+import { Button, Checkbox } from "@mui/material";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -20,9 +20,10 @@ export default function LoginForm() {
   const setIsLoggedIn = useUserStore(state => state.setIsLoggedIn);
 
   const [form, setForm] = useState<_LoginForm>({
-    username: "",
+    email: "",
     password: "",
-  })
+  });
+  const [showPass, setShowPass] = useState(false);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -33,16 +34,15 @@ export default function LoginForm() {
     e.preventDefault();
 
     const result = await authService.login({
-      username: form.username,
-      password: form.password,
-      loginType: 1
+      email: form.email,
+      password: form.password
     });
 
     if (result.success && result.data?.token) {
       setIsLoggedIn(true);
       router.push(redirectPath);
     }
-  }
+  } 
 
   return (
     <div className="m-auto w-[90%] h-auto max-w-80 bg-white px-3 rounded-lg border border-gray-900">
@@ -60,22 +60,26 @@ export default function LoginForm() {
         <div>
           <input
             type="text"
-            name="username"
+            name="email"
             className={"w-full border outline-none rounded px-2 py-2"}
-            placeholder="username"
-            value={form.username}
+            placeholder="email"
+            value={form.email}
             onChange={handleChange}
           />
         </div>
         <div>
           <input
-            type="password"
+            type={showPass ? "text" : "password"}
             name="password"
             className={"w-full border outline-none rounded px-2 py-2"}
             placeholder="password"
             value={form.password}
             onChange={handleChange}
           />
+        </div>
+        <div className="flex items-center gap-2">
+          <input type="checkbox" id="show_hide_pass" onChange={() => setShowPass(!showPass)} checked={showPass} />
+          <label htmlFor="show_hide_pass">{showPass ? "Hide password" : "Show password"}</label>
         </div>
         <Button
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition mb-3"
