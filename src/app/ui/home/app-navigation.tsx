@@ -1,4 +1,4 @@
-import { DUTUBE_URL, FAKEBOOK_URL } from "@/app/lib/url_paths";
+import { DDD_CATALOG_URL, DUTUBE_URL, FAKEBOOK_URL } from "@/app/lib/url_paths";
 import { Button } from "@mui/material";
 import Link from "next/link";
 
@@ -12,6 +12,7 @@ export default function AppNavigation() {
   const APP_LIST: APP_ITEM[] = [
     { title: "Fakebook", url: FAKEBOOK_URL },
     { title: "Dutube", url: DUTUBE_URL },
+    { title: "3D Catalog", url: DDD_CATALOG_URL },
   ];
 
   return (

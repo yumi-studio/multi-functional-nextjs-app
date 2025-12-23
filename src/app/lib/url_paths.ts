@@ -10,3 +10,5 @@ export const FAKEBOOK_STORIES_URL = "/fakebook/stories";
 export const FAKEBOOK_PROFILE_URL = "/fakebook/profile";
 
 export const DUTUBE_URL = "/dutube";
+
+export const DDD_CATALOG_URL = "/ddd-catalog";
