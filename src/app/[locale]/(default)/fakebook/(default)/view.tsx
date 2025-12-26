@@ -57,7 +57,7 @@ export default function View() {
 
   return (
     <div className="bg-[rgba(0,0,0,0.1)] w-full h-full m-auto rounded-md overflow-auto backdrop-blur-md">
-      <div className="text-center bg-white rounded-md py-2">
+      <div className="text-center bg-white rounded-b-md py-2">
         {/* <span>Profiles of <b>{userDetail?.firstName} {userDetail?.lastName}</b></span> */}
         <span><b>Select Profile</b></span>
       </div>

@@ -24,7 +24,7 @@ export default function SimpleGalleryViewer({
 	const [viewerState, setViewerState] = useState({
 		currentIndex: 0,
 		viewerWidth: 0,
-		viewerHeight: 0
+		viewerHeight: 0,
 	});
 	const viewerToPrev = () => {
 		setViewerState(prev => ({ ...prev, currentIndex: Math.max(prev.currentIndex - 1, 0) }));
@@ -35,7 +35,15 @@ export default function SimpleGalleryViewer({
 
 	useEffect(() => {
 		if (typeof window !== "undefined") {
-			const update = () => setViewerState(prev => ({ ...prev, viewerWidth: window.innerWidth, viewerHeight: window.innerHeight }));
+			const update = () => setViewerState(prev => {
+				const viewerWidth = window.innerWidth > 1024 ? 1024 : window.innerWidth;
+				const viewerHeight = window.innerHeight > 640 ? 640 : window.innerHeight;
+				return {
+					...prev,
+					viewerWidth: viewerWidth,
+					viewerHeight: viewerHeight,
+				}
+			});
 			update();
 			window.addEventListener("resize", update);
 
@@ -47,7 +55,10 @@ export default function SimpleGalleryViewer({
 
 	return (
 		<SimpleDialog open={isOpen} onClose={() => setIsOpen(false)}>
-			<div className={"media-preview absolute top-0 left-0 w-full h-full bg-black"}>
+			<div className={"media-preview bg-black relative"} style={{
+				width: `${viewerState.viewerWidth}px`,
+				height: `${viewerState.viewerHeight}px`
+			}}>
 				<div className="preview-header flex items-center p-3 absolute top-0 left-0 right-0 z-999 bg-[rgba(0,0,0,0.5)]">
 					<button onClick={() => setIsOpen(false)} type="button"><FontAwesomeIcon icon={faArrowLeft} width={"1rem"} height={"1rem"} color="white" /></button>
 					<div className="ml-auto inline-flex gap-2">
@@ -61,24 +72,27 @@ export default function SimpleGalleryViewer({
 						)}
 					</div>
 				</div>
-			</div>
-			<div className="preview-inner w-full h-full overflow-hidden">
-				<div className="preview-track inline-block whitespace-nowrap h-full w-max" style={{
-					transform: `translateX(-${viewerState.currentIndex * viewerState.viewerWidth}px)`,
-					transition: "transform 0.3s ease-in-out",
-				}}>
-					{items.map((item, index) => (
-						<div className="preview-item inline-block h-full w-svw overflow-hidden relative" key={index}>
-							{item.type === "image" && (
-								<Image src={item.src} alt={item.name} width={viewerState.viewerWidth} height={viewerState.viewerHeight}
-									className="object-contain h-full w-full"
-								/>
-							)}
-							{item.type === "video" && (
-								<video className="object-contain h-full w-full" src={item.src} width={viewerState.viewerWidth} height={viewerState.viewerHeight} controls />
-							)}
-						</div>
-					))}
+				<div className="preview-inner w-full h-full overflow-hidden">
+					<div className="preview-track flex whitespace-nowrap h-full w-max" style={{
+						width: `${items.length * viewerState.viewerWidth}px`,
+						transform: `translateX(-${viewerState.currentIndex * viewerState.viewerWidth}px)`,
+						transition: "transform 0.3s ease-in-out",
+					}}>
+						{items.map((item, index) => (
+							<div className="preview-item inline-block overflow-hidden relative aspect-video" key={index} style={{
+								width: `${viewerState.viewerWidth}px`,
+							}}>
+								{item.type === "image" && (
+									<Image src={item.src} alt={item.name} width={viewerState.viewerWidth} height={viewerState.viewerHeight}
+										className="object-contain w-full h-full"
+									/>
+								)}
+								{item.type === "video" && (
+									<video className="object-contain h-full w-full" src={item.src} width={viewerState.viewerWidth} height={viewerState.viewerHeight} controls />
+								)}
+							</div>
+						))}
+					</div>
 				</div>
 			</div>
 		</SimpleDialog >
