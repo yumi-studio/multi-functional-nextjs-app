@@ -11,6 +11,7 @@ import { useMemo, useState } from "react";
 import PostItemFooter from "./post-item-footer";
 import { useAppContext } from "@/app/context/AppContext";
 import SimpleGalleryViewer, { GalleryItem } from "../../simple-gallery-viewer";
+import PostMediaLayout from "./post-media-layout";
 
 export type PostItemProp = {
   post: Post;
@@ -70,30 +71,12 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
           </div>
         </div>
       </div>
-      <div className="post-body py-3">
-        <div className="post-content mb-3">{post.content}</div>
-        {post.mediaItems && post.mediaItems.length > 0 && (
-          <div className="post-media flex gap-2 items-stretch justify-center flex-wrap" onClick={() => setShowGallery(true)}>
-            {post.mediaItems.map((media) => (
-              <div key={media.id} className={`media-item ${media.type} relative`}>
-                {media.type === 'image' && (
-                  <Image src={media.source} alt={media.name} height={320} width={240}
-                    className="rounded-md" />
-                )}
-                {/* {media.type === 'video' && (
-                  <Image src={media.thumbnailUrl} alt={media.thumbnailUrl} width={500} height={300}
-                    className="rounded-md" />
-                  // <div className="video-wrapper overflow-hidden w-[500px] h-[300px]">
-                  //   <video controls className="rounded-md" width={500} height={300}>
-                  //     <source src={media.url} type="video/mp4" />
-                  //     Your browser does not support the video tag.
-                  //   </video>
-                  // </div>
-                )} */}
-              </div>
-            ))}
-          </div>
-        )}
+      {/* Post body */}
+      <div className="py-3">
+        {/* Post content */}
+        <div className="mb-3 whitespace-pre-wrap">{post.content}</div>
+        {/* Post media items */}
+        <PostMediaLayout items={post.mediaItems ?? []} setShowGallery={setShowGallery} />
       </div>
       {footer}
       {showGallery && post.mediaItems && post.mediaItems.length > 0 && (

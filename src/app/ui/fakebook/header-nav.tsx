@@ -2,6 +2,7 @@
 
 import { FAKEBOOK_PROFILE_URL, FAKEBOOK_URL, HOME_URL, SIGNIN_URL, SIGNUP_URL } from "@/app/lib/url_paths";
 import { useFakebookStore } from "@/app/stores/fakebook-store";
+import { useUserStore } from "@/app/stores/user-store";
 import { Link } from "@/i18n/navigation";
 import { faHome } from "@fortawesome/free-regular-svg-icons";
 import { faArrowLeft, faArrowLeftLong, faPager, faSearch, faUserGroup } from "@fortawesome/free-solid-svg-icons";
@@ -25,6 +26,7 @@ export default function HeaderNav() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const userDetail = useUserStore(state => state.userDetail);
   const activeProfile = useFakebookStore(state => state.activeProfile);
 
   return (
@@ -62,8 +64,8 @@ export default function HeaderNav() {
             {activeProfile && (
               <>
                 <div className="mb-3 text-center">
-                  <div className="bg-gray-200 w-fit m-auto rounded-full overflow-hidden border-4 border-gray-500">
-                    <Image src={activeProfile.avatarUrl} alt="Avatar" width={240} height={240} />
+                  <div className="bg-gray-200 w-fit aspect-square m-auto rounded-full overflow-hidden border-4 border-gray-500">
+                    <Image src={userDetail?.avatar ?? ""} alt="Avatar" width={240} height={240} />
                   </div>
                   <div className="mt-3 flex justify-between items-center gap-2">
                     <div className="flex-auto p-2 bg-gray-200 rounded-md wrap-break-word">

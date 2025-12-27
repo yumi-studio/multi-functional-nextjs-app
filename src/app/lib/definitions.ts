@@ -6,7 +6,8 @@ export type UserDetail = {
   lastName: string,
   gender: 0 | 1 | 2
   bio?: string,
-  birthDate?: Date
+  birthDate?: Date,
+  avatar?: string
 }
 
 export type LoginRequest = {

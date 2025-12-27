@@ -64,10 +64,8 @@ export default function View() {
           )}
         </div>
       </div>
-      <div>
-        <PostItemComments />
-        <PostCreate />
-      </div>
+      <PostItemComments />
+      <PostCreate />
     </>
   );
 }

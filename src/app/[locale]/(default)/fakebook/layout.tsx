@@ -17,7 +17,7 @@ export default async function Layout({
 }) {
   return (
     <div id="fakebook-app"
-      className="flex flex-col items-start bg-gray-200 h-svh overflow-hidden relative select-none z-0">
+      className="flex flex-col items-start bg-gray-200 h-svh w-full max-w-3xl mx-auto overflow-hidden relative select-none z-0">
       <div className="absolute top-0 left-0 w-full h-full -z-1">
         <Image src="/fakebook-bg.png" width={1920} height={1080} alt="Fakebook Background" className="object-cover w-full h-full" />
       </div>
