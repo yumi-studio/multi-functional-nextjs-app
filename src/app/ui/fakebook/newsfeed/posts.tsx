@@ -1,7 +1,7 @@
 "use client";
 
 import PostItem from "./post-item";
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
 import { useFakebookStore } from "@/app/stores/fakebook-store";
 import { postService } from "@/app/services/fakebook/post.service";
 import { ReactionType } from "@/app/lib/fakebook/definitions";

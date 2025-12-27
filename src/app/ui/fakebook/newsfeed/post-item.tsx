@@ -74,7 +74,7 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
       {/* Post body */}
       <div className="py-3">
         {/* Post content */}
-        <div className="mb-3">{post.content}</div>
+        <div className="mb-3 whitespace-pre-wrap">{post.content}</div>
         {/* Post media items */}
         <PostMediaLayout items={post.mediaItems ?? []} setShowGallery={setShowGallery} />
       </div>
