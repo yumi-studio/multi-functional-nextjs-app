@@ -221,8 +221,13 @@ export default function PostItemComments() {
   }, [saveComment]);
 
   useEffect(() => {
-    setLoadMore(true);
-  }, []);
+    if (!currentPost) {
+      // Reset if currentPost is null
+      setLoadMore(true);
+      setPager({ before: null, hasMore: true });
+      setComments([]);
+    }
+  }, [currentPost]);
 
   useEffect(() => {
     if (!loadMore) return;
