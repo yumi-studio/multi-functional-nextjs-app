@@ -32,7 +32,7 @@ export const login = async (
   const { username, password } = validatedFields.data;
 
   try {
-    const res = await fetch(`${process.env.API_BACKEND_HOST}/api/auth/login`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

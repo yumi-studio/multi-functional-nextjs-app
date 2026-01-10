@@ -59,15 +59,15 @@ export default function PostCreate() {
   const handlePostSubmit = async () => {
     // Handle post submission logic here
     const uploadMediaPromises = mediaFiles.map(file => postService.uploadMedia(file));
-    const uploadMediaResponse = await Promise.all(uploadMediaPromises);
-    const media_item_ids = uploadMediaResponse.map(res => res.data?.fileUploadId);
+    const uploadMediaResponses = await Promise.all(uploadMediaPromises);
+    const mediaItems = uploadMediaResponses.map(res => res.data);
     const createPostResponse = await postService.createPost({
       content: content,
       visibility: 1,
-      mediaItemIds: media_item_ids as [string]
+      mediaItems: mediaItems.map(mi => mi)
     });
-    if (createPostResponse.success && createPostResponse.data?.postId) {
-      const newPostResult = await postService.getPost({ postId: createPostResponse.data.postId });
+    if (createPostResponse.success && createPostResponse.data?.id) {
+      const newPostResult = await postService.getPost({ postId: createPostResponse.data.id });
       if (newPostResult.success && newPostResult.data) {
         addPost(newPostResult.data);
         setMediaFiles([]);

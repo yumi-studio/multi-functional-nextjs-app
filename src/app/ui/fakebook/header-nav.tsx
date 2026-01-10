@@ -65,7 +65,7 @@ export default function HeaderNav() {
               <>
                 <div className="mb-3 text-center">
                   <div className="bg-gray-200 w-fit aspect-square m-auto rounded-full overflow-hidden border-4 border-gray-500">
-                    <Image src={userDetail?.avatar ?? ""} alt="Avatar" width={240} height={240} />
+                    <Image src={userDetail?.avatar ?? "/sample/avatar/1.png"} alt="Avatar" width={240} height={240} />
                   </div>
                   <div className="mt-3 flex justify-between items-center gap-2">
                     <div className="flex-auto p-2 bg-gray-200 rounded-md wrap-break-word">

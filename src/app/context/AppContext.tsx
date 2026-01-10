@@ -19,15 +19,15 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 			e.preventDefault();
 		});
 
-		(async () => {
-			try {
-				await fetch(process.env.NEXT_PUBLIC_API_HOST as string);
-				setIsOffline(false);
-			} catch {
-				setIsOffline(true);
-				toast("Offline Mode (Backend is not available)");
-			}
-		})();
+		// (async () => {
+		// 	try {
+		// 		await fetch(process.env.NEXT_PUBLIC_API_HOST as string);
+		// 		setIsOffline(false);
+		// 	} catch {
+		// 		setIsOffline(true);
+		// 		toast("Offline Mode (Backend is not available)");
+		// 	}
+		// })();
 	}, []);
 
 	return (

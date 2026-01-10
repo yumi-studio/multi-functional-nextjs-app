@@ -5,12 +5,26 @@ import { API_FAKEBOOK_POST_COMMENT, API_FAKEBOOK_POST_COMMENT_CREATE, API_FAKEBO
 export type CreatePostRequest = {
   content: string;
   visibility: PostVisibility;
-  mediaItemIds: string[]
+  mediaItems: {
+    name: string;
+    contentType: string;
+    path: string;
+    url: string;
+    size: number;
+  }[]
 }
 
 export type UploadMediaRequest = UploadMediaFile;
 export type UploadMediaResponse = {
-  fileUploadId: string;
+  name: string;
+  contentType: string;
+  path: string;
+  url: string;
+  size: number;
+  dimension: {
+    width: number;
+    height: number;
+  }
 }
 
 class PostsService extends BaseService {
@@ -20,7 +34,7 @@ class PostsService extends BaseService {
 
   async uploadMedia(request: UploadMediaRequest) {
     const formData = new FormData();
-    formData.append('MediaItem', request.file);
+    formData.append('file', request.file);
 
     const result: Response<UploadMediaResponse> = await this.apiClient.post(API_FAKEBOOK_POST_UPLOAD_MEDIA, formData, {
       onUploadProgress: (progressEvent) => {
@@ -35,7 +49,7 @@ class PostsService extends BaseService {
   }
 
   async createPost(request: CreatePostRequest) {
-    const result: Response<{ postId: string }> = await this.apiClient.post(API_FAKEBOOK_POST_CREATE, request);
+    const result: Response<{ id: string }> = await this.apiClient.post(API_FAKEBOOK_POST_CREATE, request);
     return result;
   }
 

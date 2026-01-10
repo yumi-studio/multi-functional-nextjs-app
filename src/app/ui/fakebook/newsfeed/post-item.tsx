@@ -35,7 +35,8 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
       <div className="post-head flex items-center gap-x-2">
         <div className="post-avatar">
           <div className="avatar-user size-10 rounded-full bg-gray-500 overflow-hidden border-blue-500 border-2">
-            <Image src={post.creator?.avatarUrl} alt="Avatar" width={240} height={240} />
+            {/* <Image src={post.creator?.avatarUrl} alt="Avatar" width={240} height={240} /> */}
+            <Image src={"/sample/avatar/1.png"} alt="Avatar" width={240} height={240} />
           </div>
         </div>
         <div className="post-title shrink-0 cursor-pointer">
