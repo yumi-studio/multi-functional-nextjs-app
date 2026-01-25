@@ -5,7 +5,7 @@ import { commentService } from "@/app/services/fakebook/comment.service";
 import { postService } from "@/app/services/fakebook/post.service";
 import { useFakebookStore } from "@/app/stores/fakebook-store";
 import { SimpleDialog } from "@/app/ui/dialogs";
-import { faClose, faEllipsisVertical, faPenToSquare, faThumbsDown, faThumbsUp, faTrash, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faEllipsisVertical, faPenToSquare, faThumbsDown, faThumbsUp, faTrash, faUser, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Skeleton } from "@mui/material";
 import Image from "next/image";
@@ -70,7 +70,12 @@ function PostComment({ comment, isReply = false, changeReaction }: PostCommentPr
   return (
     <div className="comment flex items-start gap-2 mb-3 text-[0.875rem]">
       <div className="comment-avatar size-10 rounded-full overflow-hidden border-blue-500 border-2">
-        <Image src={comment.creator.avatarUrl} alt={comment.creator.avatarUrl} width={120} height={120}></Image>
+        {comment.creator.avatarUrl && (
+          <Image src={comment.creator.avatarUrl} alt={comment.creator.avatarUrl} width={120} height={120}></Image>
+        )}
+        {!comment.creator.avatarUrl && (
+          <FontAwesomeIcon icon={faUser} widthAuto fontSize={'40px'} color="gray" />
+        )}
       </div>
       <div className="comment-detail flex-auto">
         <div className="comment-displayname font-semibold flex w-full pb-1">

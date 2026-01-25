@@ -2,7 +2,7 @@
 
 import { Post, ReactionType } from "@/app/lib/fakebook/definitions";
 import { useFakebookStore } from "@/app/stores/fakebook-store";
-import { faTrashCan, faPenToSquare, faFlag } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faPenToSquare, faFlag, faUser } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -34,9 +34,13 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
     }>
       <div className="post-head flex items-center gap-x-2">
         <div className="post-avatar">
-          <div className="avatar-user size-10 rounded-full bg-gray-500 overflow-hidden border-blue-500 border-2">
-            {/* <Image src={post.creator?.avatarUrl} alt="Avatar" width={240} height={240} /> */}
-            <Image src={"/sample/avatar/1.png"} alt="Avatar" width={240} height={240} />
+          <div className="avatar-user size-10 rounded-full overflow-hidden border-blue-500 border-2">
+            {post.creator.avatarUrl && (
+              <Image src={post.creator.avatarUrl} alt={post.creator.avatarUrl} width={120} height={120} />
+            )}
+            {!post.creator.avatarUrl && (
+              <FontAwesomeIcon icon={faUser} widthAuto fontSize={'40px'} color="gray" />
+            )}
           </div>
         </div>
         <div className="post-title shrink-0 cursor-pointer">

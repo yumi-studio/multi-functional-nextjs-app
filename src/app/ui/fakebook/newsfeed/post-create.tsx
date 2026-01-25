@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useState } from "react";
 import SimpleGalleryViewer, { GalleryItem } from "@/app/ui/simple-gallery-viewer";
+import { uploadService } from "@/app/services/fakebook/upload.servie";
 
 export default function PostCreate() {
   const t = useTranslations("fakebook.newsfeed");
@@ -58,7 +59,7 @@ export default function PostCreate() {
   };
   const handlePostSubmit = async () => {
     // Handle post submission logic here
-    const uploadMediaPromises = mediaFiles.map(file => postService.uploadMedia(file));
+    const uploadMediaPromises = mediaFiles.map(file => uploadService.uploadMedia(file));
     const uploadMediaResponses = await Promise.all(uploadMediaPromises);
     const mediaItems = uploadMediaResponses.map(res => res.data);
     const createPostResponse = await postService.createPost({

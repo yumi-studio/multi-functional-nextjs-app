@@ -1,5 +1,6 @@
-const USER_API_BASEURL = process.env.NEXT_PUBLIC_USER_API_HOST ?? "http://localhost:8080";
-const FAKEBOOK_API_BASEURL = process.env.NEXT_PUBLIC_FAKEBOOK_API_HOST ?? "http://localhost:8081";
+const USER_API_BASEURL = process.env.NEXT_PUBLIC_USER_API_HOST ?? "https://localhost:8080";
+const FAKEBOOK_API_BASEURL = process.env.NEXT_PUBLIC_FAKEBOOK_API_HOST ?? "https://localhost:8081";
+
 const USER_API_V1 = (USER_API_BASEURL.endsWith("/") ? USER_API_BASEURL.substring(0, USER_API_BASEURL.length - 1) : USER_API_BASEURL) + "/api/v1"
 const FAKEBOOK_API_V1 = (FAKEBOOK_API_BASEURL.endsWith("/") ? FAKEBOOK_API_BASEURL.substring(0, FAKEBOOK_API_BASEURL.length - 1) : FAKEBOOK_API_BASEURL) + "/api/v1"
 
@@ -23,7 +24,6 @@ export const API_FAKEBOOK_POST_LIST = FAKEBOOK_API_V1 + "/fakebook/posts";
 export const API_FAKEBOOK_POST_CREATE = FAKEBOOK_API_V1 + "/fakebook/posts";
 export const API_FAKEBOOK_POST_DETAIL = FAKEBOOK_API_V1 + "/fakebook/posts/{{id}}";
 export const API_FAKEBOOK_POST_DELETE = FAKEBOOK_API_V1 + "/fakebook/posts/{{id}}";
-export const API_FAKEBOOK_POST_UPLOAD_MEDIA = USER_API_V1 + "/uploader/new";
 export const API_FAKEBOOK_POST_COMMENT = FAKEBOOK_API_V1 + "/fakebook/posts/{{id}}/comments";
 export const API_FAKEBOOK_POST_COMMENT_CREATE = FAKEBOOK_API_V1 + "/fakebook/posts/{{id}}/comments";
 export const API_FAKEBOOK_POST_REACT = FAKEBOOK_API_V1 + "/fakebook/posts/{{id}}/react";
@@ -35,3 +35,5 @@ export const API_FAKEBOOK_COMMENT_UPDATE = FAKEBOOK_API_V1 + "/fakebook/comments
 export const API_FAKEBOOK_COMMENT_DELETE = FAKEBOOK_API_V1 + "/fakebook/comments/{{id}}";
 export const API_FAKEBOOK_COMMENT_REACT = FAKEBOOK_API_V1 + "/fakebook/comments/{{id}}/react";
 export const API_FAKEBOOK_COMMENT_STATISTIC = FAKEBOOK_API_V1 + "/fakebook/comments/{{id}}/statistic";
+
+export const API_FAKEBOOK_UPLOADFILE = FAKEBOOK_API_V1 + "/fakebook/upload";

@@ -9,7 +9,13 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "localhost",
-        port: "8080",
+        port: '8080',
+        pathname: "/**"
+      },
+      {
+        protocol: "https",
+        hostname: "localhost",
+        port: '8081',
         pathname: "/**"
       }
     ],
