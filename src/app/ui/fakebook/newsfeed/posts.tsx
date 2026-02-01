@@ -5,11 +5,13 @@ import PostItem from "./post-item";
 import { useFakebookStore } from "@/app/stores/fakebook-store";
 import { postService } from "@/app/services/fakebook/post.service";
 import { ReactionType } from "@/app/lib/fakebook/definitions";
+import { useEffect } from "react";
 
 export default function Posts() {
   // const t = useTranslations("fakebook.newsfeed");
   const posts = useFakebookStore((state) => state.posts);
   const setPosts = useFakebookStore((state) => state.setPosts);
+  const activeProfile = useFakebookStore((state) => state.activeProfile);
 
   const changeReaction = async (id: string, reaction: ReactionType) => {
     const reactRes = await postService.reactPost({ postId: id, type: reaction });
@@ -26,6 +28,21 @@ export default function Posts() {
       } : post
     }));
   }
+
+  useEffect(() => {
+    let hasChange = false;
+    const updatePosts = posts.map((post) => {
+      if (post.creator.id === activeProfile?.id) {
+        hasChange = true;
+        return { ...post, creator: { ...post.creator, avatarUrl: activeProfile.avatarUrl } };
+      }
+
+      return post;
+    });
+    if (hasChange) {
+      setPosts(updatePosts);
+    }
+  }, [activeProfile?.avatarUrl])
 
   return (
     <>

@@ -7,11 +7,12 @@ import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PostItemFooter from "./post-item-footer";
 import { useAppContext } from "@/app/context/AppContext";
 import SimpleGalleryViewer, { GalleryItem } from "../../simple-gallery-viewer";
 import PostMediaLayout from "./post-media-layout";
+import { formatDateTime } from "@/app/lib/utils";
 
 export type PostItemProp = {
   post: Post;
@@ -20,9 +21,14 @@ export type PostItemProp = {
 
 export default function PostItem({ post, changeReaction }: PostItemProp) {
   const [showOptions, setShowOptions] = useState(false);
-  const [showGallery, setShowGallery] = useState(false);
+  const [gallery, setGallery] = useState({
+    isOpen: false,
+    initialIndex: 0,
+  });
   const currentPost = useFakebookStore((state) => state.currentPost);
   const appContext = useAppContext();
+  const activeProfile = useFakebookStore((state) => state.activeProfile);
+
   const footer = useMemo(() => {
     return <PostItemFooter post={post} changeReaction={changeReaction} />
   }, [post, changeReaction]);
@@ -49,7 +55,7 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
             {/* {post.creator.is_verified && <FontAwesomeIcon icon={faCircleCheck} color="blue" className="ml-1" />} */}
           </div>
           <div className="flex">
-            <span className="text-[0.825rem]">#{new Date(post.createdAt).toLocaleString()}</span>
+            <span className="text-[0.825rem]">{formatDateTime(new Date(post.createdAt))}</span>
           </div>
         </div>
         <div className="post-options relative ml-auto select-none self-start">
@@ -81,17 +87,17 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
         {/* Post content */}
         <div className="mb-3 whitespace-pre-wrap">{post.content}</div>
         {/* Post media items */}
-        <PostMediaLayout items={post.mediaItems ?? []} setShowGallery={setShowGallery} />
+        <PostMediaLayout items={post.mediaItems ?? []} setGallery={setGallery} />
       </div>
       {footer}
-      {showGallery && post.mediaItems && post.mediaItems.length > 0 && (
+      {gallery.isOpen && post.mediaItems && post.mediaItems.length > 0 && (
         <SimpleGalleryViewer items={post.mediaItems.map((item) => {
           return {
             name: item.name,
             src: item.source,
             type: item.type
           } as GalleryItem;
-        })} isOpen={showGallery} setIsOpen={setShowGallery} />
+        })} isOpen={gallery.isOpen} setIsOpen={(isOpen) => { setGallery(prev => ({ ...prev, isOpen: isOpen })) }} initialIndex={gallery.initialIndex} />
       )}
     </div>
   )

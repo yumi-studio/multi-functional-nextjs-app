@@ -19,6 +19,7 @@ export const API_FAKEBOOK_PROFILE_LIST = FAKEBOOK_API_V1 + "/fakebook/profiles";
 export const API_FAKEBOOK_PROFILE_CREATE = FAKEBOOK_API_V1 + "/fakebook/profiles";
 export const API_FAKEBOOK_PROFILE_ME = FAKEBOOK_API_V1 + "/fakebook/profiles/me";
 export const API_FAKEBOOK_PROFILE_SWITCH = FAKEBOOK_API_V1 + "/fakebook/profiles/switch";
+export const API_FAKEBOOK_PROFILE_UPDATE_AVATAR = FAKEBOOK_API_V1 + "/fakebook/profiles/avatar";
 
 export const API_FAKEBOOK_POST_LIST = FAKEBOOK_API_V1 + "/fakebook/posts";
 export const API_FAKEBOOK_POST_CREATE = FAKEBOOK_API_V1 + "/fakebook/posts";

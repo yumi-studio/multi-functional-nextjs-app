@@ -26,6 +26,7 @@
     "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-draggable": "^4.5.0",
+    "react-player": "^3.4.0",
     "react-toastify": "^11.0.5",
     "underscore": "^1.13.7",
     "web-push": "^3.6.7",

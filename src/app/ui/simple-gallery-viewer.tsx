@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { SimpleDialog } from "./dialogs";
 import { useTheme } from "@mui/material";
+import ReactPlayer from "react-player";
 
 export type GalleryItem = {
   name: string;
@@ -16,17 +17,22 @@ export type GalleryItem = {
 export default function SimpleGalleryViewer({
   items,
   isOpen,
+  initialIndex,
   setIsOpen
 }: {
   items: GalleryItem[];
   isOpen: boolean;
+  initialIndex?: number;
   setIsOpen: (value: boolean) => void;
 }) {
   const [viewerState, setViewerState] = useState({
-    currentIndex: 0,
+    isReady: false,
+    currentIndex: initialIndex ?? 0,
     viewerWidth: 0,
     viewerHeight: 0,
   });
+  const headerWrapperRef = useRef<HTMLDivElement>(null);
+  const thumbnailsWrapperRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
   const swipeStartX = useRef(0);
@@ -49,24 +55,24 @@ export default function SimpleGalleryViewer({
     if (deltaX > threshold) viewerToPrev();
     if (deltaX < -threshold) viewerToNext();
   };
-  useEffect(() => {
-    itemRefs.current[viewerState.currentIndex]?.scrollIntoView({
-      behavior: "smooth",
+  const scrollToSlide = (index: number, immediately = false) => {
+    itemRefs.current[index]?.scrollIntoView({
+      behavior: immediately ? "instant" : "smooth",
       inline: "center",
       block: "center",
     })
-    thumbnailRefs.current[viewerState.currentIndex]?.scrollIntoView({
-      behavior: "smooth",
+    thumbnailRefs.current[index]?.scrollIntoView({
+      behavior: immediately ? "instant" : "smooth",
       inline: "center",
       block: "center",
     });
-  }, [viewerState.currentIndex]);
+  }
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const update = () => setViewerState(prev => {
-        const viewerWidth = window.innerWidth > 1024 ? 1024 : window.innerWidth;
-        const viewerHeight = window.innerHeight > 1024 ? 1024 : window.innerHeight;
+        const viewerWidth = window.innerWidth;
+        const viewerHeight = window.innerHeight;
         return {
           ...prev,
           viewerWidth: viewerWidth,
@@ -76,19 +82,32 @@ export default function SimpleGalleryViewer({
       update();
       window.addEventListener("resize", update);
 
+      const checkItemsReady = setInterval(() => {
+        if (itemRefs.current.length === items.length && thumbnailRefs.current.length === items.length) {
+          clearInterval(checkItemsReady);
+          scrollToSlide(viewerState.currentIndex, true);
+          setViewerState(prev => ({ ...prev, isReady: true }));
+        }
+      }, 100);
+
       return () => {
         window.removeEventListener("resize", update);
+        clearInterval(checkItemsReady);
       }
     }
   }, []);
 
+  useEffect(() => {
+    scrollToSlide(viewerState.currentIndex);
+  }, [viewerState.currentIndex]);
+
   return (
     <SimpleDialog open={isOpen} onClose={() => setIsOpen(false)}>
-      <div className={"bg-black fixed z-50 left-1/2 top-1/2 -translate-1/2"} style={{
+      <div className={"bg-black fixed z-50 left-1/2 top-1/2 -translate-1/2 flex flex-col"} style={{
         width: `${viewerState.viewerWidth}px`,
         height: `${viewerState.viewerHeight}px`
       }}>
-        <div className="flex items-center p-3 absolute top-0 left-0 w-full z-999 bg-[rgba(0,0,0,0.5)]">
+        <div className="shrink-0 flex items-center p-3 w-full z-999 bg-[rgba(0,0,0,0.5)]" ref={headerWrapperRef}>
           <button onClick={() => setIsOpen(false)} type="button"><FontAwesomeIcon icon={faArrowLeft} width={"1rem"} height={"1rem"} color="white" /></button>
           <div className="ml-auto inline-flex gap-2">
             {items.length > 1 && (
@@ -102,7 +121,9 @@ export default function SimpleGalleryViewer({
           </div>
         </div>
         {/* Viewer inner */}
-        <div className="w-full h-full overflow-hidden relative">
+        <div className="w-full flex-auto overflow-hidden relative" style={{
+          opacity: viewerState.isReady ? 100 : 0,
+        }}>
           {/* Viewer inner track */}
           <div className="w-full h-full overflow-hidden whitespace-nowrap no-scrollbar" style={{
             fontSize: 0
@@ -111,7 +132,7 @@ export default function SimpleGalleryViewer({
             {items.map((item, index) => (
               <div className="inline-block overflow-hidden relative touch-pan-y" key={index} style={{
                 width: `${viewerState.viewerWidth}px`,
-                height: `${viewerState.viewerHeight}px`
+                height: `100%`
               }}
                 ref={el => { itemRefs.current[index] = el; }}
                 onPointerDown={onPointerDown}
@@ -122,19 +143,25 @@ export default function SimpleGalleryViewer({
                   />
                 )}
                 {item.type === "video" && (
-                  <video className="object-contain h-full w-full" src={item.src} width={viewerState.viewerWidth} height={viewerState.viewerHeight} controls />
+                  // <video className="object-contain h-full w-full" src={item.src} width={viewerState.viewerWidth} height={viewerState.viewerHeight} controls />
+                  <ReactPlayer src={item.src} className="" style={{
+                    width: '100%',
+                    height: '100%',
+                  }} controls />
                 )}
               </div>
             ))}
           </div>
-          {/* Viewer thumbnail track */}
-          <div className="w-full absolute bottom-0 left-0 p-2 bg-[rgba(0,0,0,0.5)] whitespace-nowrap overflow-auto no-scrollbar text-center">
+        </div>
+        {/* Viewer thumbnail track */}
+        <div className="shrink-0 w-full p-3 overflow-auto">
+          <div className="flex h-16 gap-2 w-fit min-w-full items-center justify-center"
+            ref={thumbnailsWrapperRef}>
             {items.map((item, index) => (
               <div
                 className={
-                  `inline-block h-16 w-16 bg-black overflow-hidden rounded-md `
+                  `shrink-0 h-16 w-16 bg-black overflow-hidden rounded-md `
                   + (index === viewerState.currentIndex && " outline-2 outline-blue-300 ")
-                  + (index !== (items.length - 1) && " mr-2 ")
                 }
                 key={index}
                 onClick={() => {

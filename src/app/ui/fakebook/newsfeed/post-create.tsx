@@ -73,6 +73,7 @@ export default function PostCreate() {
         addPost(newPostResult.data);
         setMediaFiles([]);
         setNewPostModalOpen(false);
+        setContent("");
       }
     }
   };
@@ -89,7 +90,7 @@ export default function PostCreate() {
         </div>
         <div className="bg-gray-300 h-[1px] my-3"></div>
         <form
-          className=""
+          className="flex-auto overflow-auto"
         >
           <div className="form-item mb-2">
             <textarea

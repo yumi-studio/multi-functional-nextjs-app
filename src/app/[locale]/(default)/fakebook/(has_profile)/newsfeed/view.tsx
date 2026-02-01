@@ -45,11 +45,11 @@ export default function View() {
   }, []);
 
   useEffect(() => {
-    if (activeProfile) {
+    if (activeProfile?.id) {
       reloadPosts();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeProfile]);
+  }, [activeProfile?.id]);
 
   if (activeProfile === null) return;
 
