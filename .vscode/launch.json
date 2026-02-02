@@ -9,7 +9,7 @@
       "name": "Run Script: dev (learning-nextjs-multi-features)",
       "request": "launch",
       "command": "npm run dev",
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}",
     }
   ]
 }

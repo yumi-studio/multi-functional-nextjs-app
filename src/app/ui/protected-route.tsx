@@ -1,18 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
 import NoAuth from "./no-auth";
 import { useUserStore } from "@/app/stores/user-store";
+import { useAppContext } from "../context/AppContext";
 
 export default function ProtectedRoute({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const isLoggedIn = useUserStore(state => state.isLoggedIn);
+  const userDetail = useUserStore(state => state.userDetail);
 
-  if (!isLoggedIn) {
-    return <NoAuth />
-  } else {
-    return <>{children}</>;
+  if (!userDetail) {
+    return <NoAuth />;
   }
+
+  return children;
 }

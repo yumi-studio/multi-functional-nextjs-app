@@ -23,7 +23,7 @@ class AuthService extends BaseService {
   }
 
   async externalProviders() {
-    const result: Response<{ [key: number]: string }> = await this.apiClient.get(API_AUTH_EXTERNAL_PROVIDERS);
+    const result: Response<{ [key: string]: string }> = await this.apiClient.get(API_AUTH_EXTERNAL_PROVIDERS);
     return result;
   }
 }

@@ -8,16 +8,11 @@ import Image from "next/image";
 import { useEffect } from "react";
 
 export default function Page() {
-  const isLoggedIn = useUserStore(state => state.isLoggedIn);
+  const userDetail = useUserStore(state => state.userDetail);
   const router = useRouter();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      router.push(HOME_URL);
-    }
-  });
-
-  if (isLoggedIn) {
+  if (userDetail) {
+    router.push(HOME_URL);
     return;
   }
 

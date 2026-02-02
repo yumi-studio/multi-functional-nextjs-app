@@ -1,6 +1,6 @@
 "use client";
 
-import { LoginForm as _LoginForm } from "@/app/lib/signin/definitions";
+import { LoginForm as LoginFormState } from "@/app/lib/signin/definitions";
 import { SIGNUP_URL } from "@/app/lib/url_paths";
 import { authService } from "@/app/services/auth.service";
 import { useUserStore } from "@/app/stores/user-store";
@@ -9,19 +9,22 @@ import { Button, Checkbox } from "@mui/material";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SsoForm from "./sso-form";
+import { useAppContext } from "@/app/context/AppContext";
+import { userService } from "@/app/services/user.service";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const redirectPath = searchParams.get("redirect") || "/";
   const t = useTranslations();
-  const setIsLoggedIn = useUserStore(state => state.setIsLoggedIn);
+  const { userConfig, setUserConfig } = useAppContext();
+  const setUserDetail = useUserStore(state => state.setUserDetail);
 
-  const [form, setForm] = useState<_LoginForm>({
-    email: "",
-    password: "",
+  const [form, setForm] = useState<LoginFormState>({
+    email: userConfig.remember_login ? userConfig.save_email : "",
+    password: userConfig.remember_login ? userConfig.save_password : "",
   });
   const [showPass, setShowPass] = useState(false);
 
@@ -37,12 +40,16 @@ export default function LoginForm() {
       email: form.email,
       password: form.password
     });
+    if (!result.success) return;
 
-    if (result.success && result.data?.token) {
-      setIsLoggedIn(true);
-      router.push(redirectPath);
-    }
-  } 
+    const userDatailResult = await userService.me();
+    if (!userDatailResult.success) return;
+
+    setUserDetail(userDatailResult.data);
+    setUserConfig({ ...userConfig, save_email: form.email, save_password: form.password });
+    
+    router.push(redirectPath);
+  }
 
   return (
     <div className="m-auto w-[90%] h-auto max-w-80 bg-white px-3 rounded-lg border border-gray-900">
@@ -81,6 +88,12 @@ export default function LoginForm() {
           <input type="checkbox" id="show_hide_pass" onChange={() => setShowPass(!showPass)} checked={showPass} />
           <label htmlFor="show_hide_pass">{showPass ? "Hide password" : "Show password"}</label>
         </div>
+        <div className="flex items-center gap-2">
+          <input type="checkbox" id="remember_login"
+            onChange={() => setUserConfig({ ...userConfig, remember_login: !userConfig.remember_login })}
+            checked={userConfig.remember_login} />
+          <label htmlFor="remember_login">Remember login?</label>
+        </div>
         <Button
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition mb-3"
           variant="contained"
@@ -90,7 +103,7 @@ export default function LoginForm() {
         <div className="text-center my-2">
           <span>Need an account?</span><br /><Link href={SIGNUP_URL} className="text-blue-700"><u>Register now!</u></Link>
         </div>
-        <SsoForm />
+        {useMemo(() => <SsoForm />, [])}
       </form>
     </div>
   )

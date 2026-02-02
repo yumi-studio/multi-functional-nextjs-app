@@ -10,9 +10,8 @@ import { useState } from "react";
 
 export default function AccountBar() {
   const t = useTranslations();
-  const setIsLoggedIn = useUserStore(state => state.setIsLoggedIn);
-  const setUserDetail = useUserStore(state => state.setUserDetail);
   const userDetail = useUserStore(state => state.userDetail);
+  const setUserDetail = useUserStore(state => state.setUserDetail);
   const [showLogout, setShowLogout] = useState(false);
 
   const onLogoutConfirm = async () => {
@@ -20,7 +19,6 @@ export default function AccountBar() {
     const { success } = await authService.logout();
     if (success) {
       setUserDetail(null);
-      setIsLoggedIn(false);
     }
   }
 
