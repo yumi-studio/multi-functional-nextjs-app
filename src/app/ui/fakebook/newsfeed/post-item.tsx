@@ -58,11 +58,11 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
             <span className="text-[0.825rem]">{formatDateTime(new Date(post.createdAt))}</span>
           </div>
         </div>
-        <div className="post-options relative ml-auto select-none self-start">
-          <FontAwesomeIcon icon={!showOptions ? faBars : faXmark}
+        <div className="post-options relative ml-auto select-none self-start" onMouseLeave={() => setShowOptions(false)}>
+          <FontAwesomeIcon icon={faBars}
             onClick={() => { setShowOptions(!showOptions) }}
             className="cursor-pointer" />
-          <div className={`options absolute ${showOptions ? 'block' : 'hidden'} right-0 top-full bg-white shadow-lg rounded-md pt-1 pb-1 pl-2 pr-2 border-[1px] border-gray-200`}>
+          <div className={`absolute ${showOptions ? 'block' : 'hidden'} right-0 top-0 bg-white shadow-lg rounded-md pt-1 pb-1 pl-2 pr-2 border-[1px] border-gray-200 bg-white`}>
             <ul className="w-[100px]">
               <li className="cursor-pointer whitespace-nowrap" onClick={() => appContext.alertInDevelop()}>
                 <FontAwesomeIcon className="mr-1.5" icon={faPenToSquare} />

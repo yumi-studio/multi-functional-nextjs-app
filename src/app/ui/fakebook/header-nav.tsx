@@ -72,7 +72,7 @@ export default function HeaderNav() {
       </div>
       <div className={`absolute bottom-0 left-0 right-0 z-10`}>
         <div
-          className={`h-svh absolute bottom-0 right-0 bg-black transition-all ease-in-out duration-200 ${menuOpen ? "opacity-50 w-full" : "opacity-0 w-0"}`}
+          className={`h-svh absolute bottom-0 right-0 bg-black transition-opacity ease-in-out duration-200 ${menuOpen ? "opacity-50 w-full" : "opacity-0 w-0"}`}
           onClick={() => setMenuOpen(false)}></div>
         <nav className={
           `main-nav transition-all ease-in-out duration-200 absolute z-10 bottom-0 right-0 h-svh bg-white overflow-hidden ${menuOpen ? "opacity-100 w-80" : "opacity-0 w-0"}`
