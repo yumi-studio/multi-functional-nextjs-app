@@ -1,11 +1,11 @@
 "use client"
 
-import { createContext, EventHandler, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Bounce, toast } from "react-toastify";
 import { HttpStatusCode } from "axios";
-import { userIdb } from "../lib/indexDb";
-import apiClient from "../services/api-client";
-import { useUserStore } from "../stores/user-store";
+import { userIdb } from "@/app/lib/indexDb";
+import apiClient from "@/app/services/api-client";
+import { useUserStore } from "@/app/stores/user-store";
 
 type UserConfig = {
   remember_login: boolean;
@@ -18,11 +18,16 @@ const AppContext = createContext<{
   userConfig: UserConfig;
   alertInDevelop: () => void;
   setUserConfig: (userConfig: UserConfig) => void;
-  setIsAppReady: (state: boolean) => void;
+  showLoading: () => void;
+  hideLoading: () => void;
 } | null>(null);
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAppReady, setIsAppReady] = useState(false);
+  const [loading, setLoading] = useState({
+    enable: false,
+    count: 0,
+  });
   const [userConfig, setUserConfig] = useState<UserConfig>({
     remember_login: false,
     save_email: "",
@@ -75,14 +80,24 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     userIdb.set('config', userConfig);
   }, [userConfig])
 
+  useEffect(() => {
+    console.log('Loading count:', loading.count);
+  }, [loading.count]);
+
   return (
     <AppContext.Provider value={{
       isAppReady,
       userConfig,
       alertInDevelop,
       setUserConfig,
-      setIsAppReady,
+      showLoading: () => setLoading(prev => ({ enable: true, count: prev.count + 1 })),
+      hideLoading: () => setLoading(prev => ({ enable: ((prev.count - 1) > 0), count: prev.count - 1 })),
     }}>
+      {loading.enable && (
+        <div className="flex items-center justify-center bg-gray-50 opacity-50 absolute z-[9999] top-0 left-0 w-svw h-svh">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
       {isAppReady && children}
     </AppContext.Provider>
   )

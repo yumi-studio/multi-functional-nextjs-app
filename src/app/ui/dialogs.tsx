@@ -1,4 +1,4 @@
-import { useMediaQuery, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import React from 'react';
 
@@ -11,11 +11,27 @@ export interface SimpleDialogProps {
 export function SimpleDialog(props: SimpleDialogProps) {
   const { children, open, onClose } = props;
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <Dialog open={open} onClose={onClose} hideBackdrop={true} maxWidth={false} fullScreen={fullScreen}>
-        {children}
+    <Dialog
+      open={open}
+      onClose={onClose}
+      hideBackdrop={true}
+      maxWidth={false}
+      fullScreen={true}
+      slotProps={{
+        paper: {
+          sx: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'transparent',
+            minHeight: '100vh',
+          },
+        },
+      }}
+    >
+      {children}
     </Dialog>
-  )
+  );
 }

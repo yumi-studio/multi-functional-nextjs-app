@@ -13,6 +13,8 @@ import { useAppContext } from "@/app/context/AppContext";
 import SimpleGalleryViewer, { GalleryItem } from "../../simple-gallery-viewer";
 import PostMediaLayout from "./post-media-layout";
 import { formatDateTime } from "@/app/lib/utils";
+import { postService } from "@/app/services/fakebook/post.service";
+import { useFakebookContext } from "@/app/context/FakebookContext";
 
 export type PostItemProp = {
   post: Post;
@@ -27,6 +29,7 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
   });
   const currentPost = useFakebookStore((state) => state.currentPost);
   const appContext = useAppContext();
+  const { actionDeletePost } = useFakebookContext();
   const activeProfile = useFakebookStore((state) => state.activeProfile);
 
   const footer = useMemo(() => {
@@ -58,22 +61,26 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
             <span className="text-[0.825rem]">{formatDateTime(new Date(post.createdAt))}</span>
           </div>
         </div>
-        <div className="post-options relative ml-auto select-none self-start" onMouseLeave={() => setShowOptions(false)}>
+        <div className="post-options relative ml-auto select-none self-start z-10" onMouseLeave={() => setShowOptions(false)}>
           <FontAwesomeIcon icon={faBars}
             onClick={() => { setShowOptions(!showOptions) }}
             className="cursor-pointer" />
           <div className={`absolute ${showOptions ? 'block' : 'hidden'} right-0 top-0 bg-white shadow-lg rounded-md pt-1 pb-1 pl-2 pr-2 border-[1px] border-gray-200 bg-white`}>
             <ul className="w-[100px]">
-              <li className="cursor-pointer whitespace-nowrap" onClick={() => appContext.alertInDevelop()}>
-                <FontAwesomeIcon className="mr-1.5" icon={faPenToSquare} />
-                <span>Edit</span>
-              </li>
-              <hr className="text-gray-200 py-0.5" />
-              <li className="cursor-pointer whitespace-nowrap" onClick={() => appContext.alertInDevelop()}>
-                <FontAwesomeIcon className="mr-1.5" icon={faTrashCan} />
-                <span>Delete</span>
-              </li>
-              <hr className="text-gray-200 py-0.5" />
+              {activeProfile && post.creator.id === activeProfile.id && (
+                <>
+                  <li className="cursor-pointer whitespace-nowrap" onClick={() => appContext.alertInDevelop()}>
+                    <FontAwesomeIcon className="mr-1.5" icon={faPenToSquare} />
+                    <span>Edit</span>
+                  </li>
+                  <hr className="text-gray-200 py-0.5" />
+                  <li className="cursor-pointer whitespace-nowrap" onClick={() => { actionDeletePost(post.id) }}>
+                    <FontAwesomeIcon className="mr-1.5" icon={faTrashCan} />
+                    <span>Delete</span>
+                  </li>
+                  <hr className="text-gray-200 py-0.5" />
+                </>
+              )}
               <li className="cursor-pointer whitespace-nowrap" onClick={() => appContext.alertInDevelop()}>
                 <FontAwesomeIcon className="mr-1.5" icon={faFlag} />
                 <span>Report</span>

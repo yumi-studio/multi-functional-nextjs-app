@@ -3,7 +3,7 @@ import {
 } from "@/app/lib/fakebook/definitions";
 import BaseService, { Response } from "../base.service";
 import {
-  API_FAKEBOOK_POST_COMMENT, API_FAKEBOOK_POST_COMMENT_CREATE, API_FAKEBOOK_POST_CREATE, API_FAKEBOOK_POST_DETAIL, API_FAKEBOOK_POST_LIST, API_FAKEBOOK_POST_REACT, API_FAKEBOOK_POST_STATISTIC
+  API_FAKEBOOK_POST_COMMENT, API_FAKEBOOK_POST_COMMENT_CREATE, API_FAKEBOOK_POST_CREATE, API_FAKEBOOK_POST_DELETE, API_FAKEBOOK_POST_DETAIL, API_FAKEBOOK_POST_LIST, API_FAKEBOOK_POST_REACT, API_FAKEBOOK_POST_STATISTIC
 } from "../api-endpoints";
 
 export type CreatePostRequest = {
@@ -50,6 +50,11 @@ class PostsService extends BaseService {
         type: request.type
       }
     );
+    return result;
+  }
+
+  async deletePost(request: { postId: string }) {
+    const result: Response<null> = await this.apiClient.delete(API_FAKEBOOK_POST_DELETE.replace("{{id}}", request.postId));
     return result;
   }
 

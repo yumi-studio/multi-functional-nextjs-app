@@ -260,7 +260,7 @@ export default function PostItemComments() {
 
   return (
     <SimpleDialog open={!!currentPost} onClose={onClose}>
-      <div className="w-svw h-svh sm:w-[640px] sm:h-[80vh] flex flex-col p-3">
+      <div className="w-full h-svh sm:w-full md:w-[640px] sm:h-[80vh] flex flex-col p-3 bg-white rounded-md shadow-md outline-1 outline-gray-200">
         <div className="font-semibold relative flex items-center justify-center">
           <span>Comments</span>
           <FontAwesomeIcon icon={faClose}

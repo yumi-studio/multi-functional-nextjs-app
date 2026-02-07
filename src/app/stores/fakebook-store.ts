@@ -13,6 +13,7 @@ export type FakebookState = {
   setCurrentPost: (post: Post | null) => void;
   setPosts: (posts: Post[]) => void;
   addPost: (post: Post) => void;
+  removePost: (id: string) => void;
   setNewPostModalOpen: (open: boolean) => void;
   setNewPostMediaPreviewOpen: (open: boolean) => void;
 };
@@ -27,6 +28,7 @@ export const useFakebookStore = create<FakebookState>((set) => ({
   setCurrentPost: (post) => set({ currentPost: post }),
   setPosts: (posts) => set({ posts }),
   addPost: (post) => set((state) => ({ posts: [post, ...state.posts] })),
+  removePost: (id: string) => set((state) => ({ posts: state.posts.filter(post => post.id !== id) })),
   setNewPostModalOpen: (open) => set({ newPostModalOpen: open }),
   setNewPostMediaPreviewOpen: (open) => set({ newPostMediaPreviewOpen: open }),
 }));

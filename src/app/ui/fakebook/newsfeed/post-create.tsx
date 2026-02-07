@@ -12,14 +12,16 @@ import Image from "next/image";
 import { useState } from "react";
 import SimpleGalleryViewer, { GalleryItem } from "@/app/ui/simple-gallery-viewer";
 import { uploadService } from "@/app/services/fakebook/upload.servie";
+import { useAppContext } from "@/app/context/AppContext";
 
 export default function PostCreate() {
   const t = useTranslations("fakebook.newsfeed");
-  const newPostModalOpen = useFakebookStore((state: FakebookState) => state.newPostModalOpen);
-  const newPostMediaPreviewOpen = useFakebookStore((state: FakebookState) => state.newPostMediaPreviewOpen);
-  const setNewPostModalOpen = useFakebookStore((state: FakebookState) => state.setNewPostModalOpen);
-  const setNewPostMediaPreviewOpen = useFakebookStore((state: FakebookState) => state.setNewPostMediaPreviewOpen);
+  const newPostModalOpen = useFakebookStore((state) => state.newPostModalOpen);
+  const newPostMediaPreviewOpen = useFakebookStore((state) => state.newPostMediaPreviewOpen);
+  const setNewPostModalOpen = useFakebookStore((state) => state.setNewPostModalOpen);
+  const setNewPostMediaPreviewOpen = useFakebookStore((state) => state.setNewPostMediaPreviewOpen);
   const addPost = useFakebookStore((state) => state.addPost);
+  const { showLoading, hideLoading } = useAppContext();
   const onClose = () => {
     setNewPostModalOpen(false);
   }
@@ -59,28 +61,33 @@ export default function PostCreate() {
   };
   const handlePostSubmit = async () => {
     // Handle post submission logic here
-    const uploadMediaPromises = mediaFiles.map(file => uploadService.uploadMedia(file));
-    const uploadMediaResponses = await Promise.all(uploadMediaPromises);
-    const mediaItems = uploadMediaResponses.map(res => res.data);
-    const createPostResponse = await postService.createPost({
-      content: content,
-      visibility: 1,
-      mediaItems: mediaItems.map(mi => mi)
-    });
-    if (createPostResponse.success && createPostResponse.data?.id) {
-      const newPostResult = await postService.getPost({ postId: createPostResponse.data.id });
-      if (newPostResult.success && newPostResult.data) {
-        addPost(newPostResult.data);
-        setMediaFiles([]);
-        setNewPostModalOpen(false);
-        setContent("");
+    showLoading();
+    try {
+      const uploadMediaPromises = mediaFiles.map(file => uploadService.uploadMedia(file));
+      const uploadMediaResponses = await Promise.all(uploadMediaPromises);
+      const mediaItems = uploadMediaResponses.map(res => res.data);
+      const createPostResponse = await postService.createPost({
+        content: content,
+        visibility: 1,
+        mediaItems: mediaItems.map(mi => mi)
+      });
+      if (createPostResponse.success && createPostResponse.data?.id) {
+        const newPostResult = await postService.getPost({ postId: createPostResponse.data.id });
+        if (newPostResult.success && newPostResult.data) {
+          addPost(newPostResult.data);
+          setMediaFiles([]);
+          setNewPostModalOpen(false);
+          setContent("");
+        }
       }
+    } catch (err) {
     }
+    hideLoading();
   };
 
   return (
     <SimpleDialog open={newPostModalOpen} onClose={onClose}>
-      <div className="w-svw h-svh sm:w-[640px] sm:h-[80vh] flex flex-col p-3">
+      <div className="w-full h-svh sm:w-full md:w-[640px] sm:h-[80vh] flex flex-col p-3 bg-white rounded-md shadow-md outline-1 outline-gray-200">
         <div className="font-semibold relative flex items-center justify-center">
           <span>{t("editor_newPostTitle")}</span>
           <FontAwesomeIcon icon={faClose}
