@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { Bounce, toast } from "react-toastify";
 import { HttpStatusCode } from "axios";
 import { userIdb } from "@/app/lib/indexDb";
@@ -13,11 +13,17 @@ type UserConfig = {
   save_password: string;
 }
 
+type UserBehavior = {
+  scrollDirection: 'none' | 'up' | 'down'
+}
+
 const AppContext = createContext<{
   isAppReady: boolean;
   userConfig: UserConfig;
+  userBehavior: UserBehavior;
   alertInDevelop: () => void;
   setUserConfig: (userConfig: UserConfig) => void;
+  setUserBehavior: Dispatch<SetStateAction<UserBehavior>>;
   showLoading: () => void;
   hideLoading: () => void;
 } | null>(null);
@@ -33,6 +39,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     save_email: "",
     save_password: "",
   });
+  const [userBehavior, setUserBehavior] = useState<UserBehavior>({
+    scrollDirection: 'none'
+  });
   const setUserDetail = useUserStore(state => state.setUserDetail);
 
   const alertInDevelop = () => {
@@ -40,9 +49,33 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   useEffect(() => {
+    let lastScrollY = 0;
+    let checkScrollTick = false;
     const eventBlockContextMenu = (e: PointerEvent) => {
       e.preventDefault();
     }
+    const handleScroll = () => {
+      let currentScrollY = window.scrollY;
+      if (!checkScrollTick && lastScrollY !== currentScrollY) {
+        checkScrollTick = true;
+        setTimeout(() => {
+          if (lastScrollY > currentScrollY) {
+            setUserBehavior(prev => ({ ...prev, scrollDirection: 'down' }));
+          } else if (lastScrollY < currentScrollY) {
+            setUserBehavior(prev => ({ ...prev, scrollDirection: 'up' }));
+          } else {
+            setUserBehavior(prev => ({ ...prev, scrollDirection: 'none' }));
+          }
+
+          checkScrollTick = false;
+        }, 100);
+      }
+      lastScrollY = currentScrollY;
+    };
+
+    document.addEventListener("contextmenu", eventBlockContextMenu);
+    document.addEventListener("scroll", handleScroll);
+
     const checkResponseUnauthorized = apiClient.interceptors.response.use(
       (res) => {
         if (res.status === HttpStatusCode.Unauthorized) {
@@ -55,7 +88,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         Promise.reject(error)
       }
     );
-    document.addEventListener("contextmenu", eventBlockContextMenu);
 
     (async () => {
       // Do all necessary loading before app ready
@@ -72,6 +104,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     return () => {
       document.removeEventListener("contextmenu", eventBlockContextMenu);
+      document.removeEventListener("scroll", handleScroll);
       apiClient.interceptors.response.eject(checkResponseUnauthorized);
     }
   }, []);
@@ -80,16 +113,14 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     userIdb.set('config', userConfig);
   }, [userConfig])
 
-  useEffect(() => {
-    console.log('Loading count:', loading.count);
-  }, [loading.count]);
-
   return (
     <AppContext.Provider value={{
       isAppReady,
       userConfig,
+      userBehavior,
       alertInDevelop,
       setUserConfig,
+      setUserBehavior,
       showLoading: () => setLoading(prev => ({ enable: true, count: prev.count + 1 })),
       hideLoading: () => setLoading(prev => ({ enable: ((prev.count - 1) > 0), count: prev.count - 1 })),
     }}>

@@ -17,8 +17,8 @@ export default async function Layout({
   return (
     <>
       <HeaderNav />
-      <main className="main-content w-full flex flex-auto overflow-auto">
-        <section className="w-full overflow-auto p-3 h-full bg-[rgba(255,255,255,0.5)] backdrop-blur-sm no-scrollbar">
+      <main className="relative z-9 main-content w-full flex flex-auto overflow-auto">
+        <section className="w-full overflow-auto p-3">
           {children}
         </section>
       </main>

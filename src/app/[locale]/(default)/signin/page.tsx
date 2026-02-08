@@ -11,8 +11,13 @@ export default function Page() {
   const userDetail = useUserStore(state => state.userDetail);
   const router = useRouter();
 
+  useEffect(() => {
+    if (userDetail) {
+      router.push(HOME_URL);
+    }
+  }, [userDetail]);
+
   if (userDetail) {
-    router.push(HOME_URL);
     return;
   }
 

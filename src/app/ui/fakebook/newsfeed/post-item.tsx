@@ -2,18 +2,16 @@
 
 import { Post, ReactionType } from "@/app/lib/fakebook/definitions";
 import { useFakebookStore } from "@/app/stores/fakebook-store";
-import { faTrashCan, faPenToSquare, faFlag, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faPenToSquare, faFlag, faUser, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
-import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import PostItemFooter from "./post-item-footer";
 import { useAppContext } from "@/app/context/AppContext";
 import SimpleGalleryViewer, { GalleryItem } from "../../simple-gallery-viewer";
 import PostMediaLayout from "./post-media-layout";
 import { formatDateTime } from "@/app/lib/utils";
-import { postService } from "@/app/services/fakebook/post.service";
 import { useFakebookContext } from "@/app/context/FakebookContext";
 
 export type PostItemProp = {
@@ -22,7 +20,9 @@ export type PostItemProp = {
 }
 
 export default function PostItem({ post, changeReaction }: PostItemProp) {
+  const postContentLine = post.content?.split('\n') ?? [];
   const [showOptions, setShowOptions] = useState(false);
+  const [showMore, setShowMore] = useState(postContentLine.length > 5 ? false : true);
   const [gallery, setGallery] = useState({
     isOpen: false,
     initialIndex: 0,
@@ -35,6 +35,9 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
   const footer = useMemo(() => {
     return <PostItemFooter post={post} changeReaction={changeReaction} />
   }, [post, changeReaction]);
+
+  useLayoutEffect(() => {
+  }, []);
 
   return (
     <div className={
@@ -92,7 +95,23 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
       {/* Post body */}
       <div className="py-3">
         {/* Post content */}
-        <div className="mb-3 whitespace-pre-wrap">{post.content}</div>
+        <div className="mb-3 bg-gray-100 rounded-md" onClick={() => { if (postContentLine.length > 5) setShowMore(!showMore) }}>
+          <div className="whitespace-pre-wrap p-2">
+            {showMore && post.content}
+            {!showMore && postContentLine.length > 5 && (
+              <>
+                {postContentLine.slice(0, 5).join('\n')}
+                <br /><span>...</span>
+              </>
+            )}
+          </div>
+          {postContentLine.length > 5 && (
+            <div className="p-2 border-t border-gray-300 text-center text-xs">
+              {!showMore && <b><FontAwesomeIcon icon={faChevronDown} /><span>Show more</span></b>}
+              {showMore && <b><FontAwesomeIcon icon={faChevronUp} />Show less</b>}
+            </div>
+          )}
+        </div>
         {/* Post media items */}
         <PostMediaLayout items={post.mediaItems ?? []} setGallery={setGallery} />
       </div>

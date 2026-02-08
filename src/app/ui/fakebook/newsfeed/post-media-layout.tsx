@@ -64,57 +64,30 @@ const TwoItemsLayout = ({ items, setGallery }: LayoutProps) => {
 }
 
 const ThreeItemsLayout = ({ items, setGallery }: LayoutProps) => {
-  const first = items[0];
-  const second = items[1];
-  const third = items[2];
+  const visibleItems = items.slice(0, 3);
   return (
-    <div className="flex items-stretch justify-center gap-2 flex-wrap" >
-      <div key={first.id} className={`type-${first.type} relative flex-auto aspect-square max-h-80`}
-        onClick={() => setGallery({ isOpen: true, initialIndex: 0 })}
-      >
-        {first.type === 'image' && (
-          <Image src={first.source} alt={first.name} height={640} width={640}
-            className="rounded-md object-cover w-full h-full object-top-left" />
-        )}
-      </div>
-      <div key={second.id} className={`type-${second.type} relative flex-auto aspect-square max-h-80`}
-        onClick={() => setGallery({ isOpen: true, initialIndex: 1 })}>
-        {second.type === 'image' && (
-          <Image src={second.source} alt={second.name} height={640} width={640}
-            className="rounded-md object-cover w-full h-full object-top-left" />
-        )}
-      </div>
-      <div key={third.id} className={`type-${third.type} relative flex-auto w-full max-h-80`}
-        onClick={() => setGallery({ isOpen: true, initialIndex: 2 })}>
-        {third.type === 'image' && (
-          <Image src={third.source} alt={third.name} height={640} width={640}
-            className="rounded-md object-cover w-full h-full object-top-left" />
-        )}
-      </div>
+    <div className="flex flex-wrap justify-center gap-2">
+      {visibleItems.map((media, index) => (
+        <div key={media.id} className={`type-${media.type} relative flex-auto h-56`}
+          onClick={() => setGallery({ isOpen: true, initialIndex: index })}>
+          {media.type === 'image' && (
+            <Image src={media.source} alt={media.name} height={640} width={640}
+              className="rounded-md object-cover h-full w-full object-top-left" />
+          )}
+        </div>
+      ))}
     </div>
   )
 }
 
 const OverThreeItemsLayout = ({ items, setGallery }: LayoutProps) => {
-  const visibleItemsFirst = items.slice(0, 2);
-  const visibleItemsSecond = items.slice(2, 4);
+  const visibleItems = items.slice(0, 4);
   return (
     <div className="flex flex-col gap-2" >
-      <div className="flex items-stretch justify-center gap-2 max-h-80">
-        {visibleItemsFirst.map((media, index) => (
-          <div key={media.id} className={`type-${media.type} relative flex-auto aspect-square`}
+      <div className="flex flex-wrap justify-center gap-2">
+        {visibleItems.map((media, index) => (
+          <div key={media.id} className={`type-${media.type} relative flex-auto h-56`}
             onClick={() => setGallery({ isOpen: true, initialIndex: index })}>
-            {media.type === 'image' && (
-              <Image src={media.source} alt={media.name} height={640} width={640}
-                className="rounded-md object-cover h-full w-full object-top-left" />
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="flex items-stretch justify-center gap-2 max-h-80">
-        {visibleItemsSecond.map((media, index) => (
-          <div key={media.id} className={`type-${media.type} relative flex-auto aspect-square`}
-            onClick={() => setGallery({ isOpen: true, initialIndex: index + 2 })}>
             {media.type === 'image' && (
               <Image src={media.source} alt={media.name} height={640} width={640}
                 className="rounded-md object-cover h-full w-full object-top-left" />

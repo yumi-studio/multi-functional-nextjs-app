@@ -12,6 +12,9 @@ import Posts from "@/app/ui/fakebook/newsfeed/posts";
 
 import { PostsSekeleton } from "@/app/ui/fakebook/skeletons";
 import { useRouter } from "@/i18n/navigation";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button, IconButton } from "@mui/material";
 import { Suspense, useEffect, useState } from "react";
 
 export default function View() {
@@ -56,7 +59,6 @@ export default function View() {
   return (
     <>
       <div className="gap-3 w-full h-full relative">
-        <PostCreateFake />
         <div className="posts flex-auto pb-3">
           <Posts />
           {loading && (

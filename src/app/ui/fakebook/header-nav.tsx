@@ -1,35 +1,41 @@
 "use client";
 
-import { FAKEBOOK_PROFILE_URL, FAKEBOOK_URL, HOME_URL, SIGNIN_URL, SIGNUP_URL } from "@/app/lib/url_paths";
+import { FAKEBOOK_FRIEND_URL, FAKEBOOK_GROUP_URL, FAKEBOOK_NEWSFEED_URL, FAKEBOOK_SEARCH_URL, FAKEBOOK_URL, HOME_URL, SIGNIN_URL, SIGNUP_URL } from "@/app/lib/url_paths";
 import { profileService } from "@/app/services/fakebook/profile.service";
 import { useFakebookStore } from "@/app/stores/fakebook-store";
-import { useUserStore } from "@/app/stores/user-store";
-import { Link } from "@/i18n/navigation";
-import { faHome } from "@fortawesome/free-regular-svg-icons";
-import { faArrowLeft, faArrowLeftLong, faPager, faSearch, faUser, faUserGroup } from "@fortawesome/free-solid-svg-icons";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { faArrowLeft, faNewspaper, faPlus, faSearch, faUser, faUserPlus, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, EventHandler, MouseEvent, MouseEventHandler, useEffect, useRef, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import { CircleIconButton } from "../buttons";
+import { useAppContext } from "@/app/context/AppContext";
 
-const navItemClass = "flex flex-wrap items-end justify-center py-2 gap-y-1";
-const navItemIconClass = "w-full mt-auto text-center";
-const navItemTextClass = "text-xs";
-const navItemActiveIconClass = navItemIconClass
-  + " border-[2px] rounded-full bg-blue-400 text-white absolute bottom-full transform translate-y-1/2"
-  + " aspect-square max-w-14 flex items-center justify-center text-sm"
-  + " ";
-const navItemActiveTextClass = "text-sm font-bold border-b"
+const navItemClass = "flex-auto shrink-0 flex flex-wrap items-end justify-center py-3 text-lg relative border-t-2 border-t-gray-300";
+const navItemActiveClass = "flex-auto shrink-0 flex flex-wrap items-end justify-center py-3 text-lg relative border-t-2 border-t-blue-600 bg-blue-100";
+const navItemIconClass = "w-full mt-auto text-center text-gray-600";
+const navItemActiveIconClass = "w-full mt-auto text-center text-blue-600";
+
+const mainMenuItems = [
+  { icon: faNewspaper, path: FAKEBOOK_NEWSFEED_URL },
+  { icon: faUserPlus, path: FAKEBOOK_FRIEND_URL },
+  { icon: faUsers, path: FAKEBOOK_GROUP_URL },
+  { icon: faSearch, path: FAKEBOOK_SEARCH_URL },
+]
 
 export default function HeaderNav() {
   const router = useRouter();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const activeProfile = useFakebookStore(state => state.activeProfile);
   const setActiveProfile = useFakebookStore(state => state.setActiveProfile);
+  const setNewPostModalOpen = useFakebookStore(state => state.setNewPostModalOpen);
+  const { userBehavior } = useAppContext();
   const avatarInputRef = useRef<HTMLInputElement>(null);
+  const newPostBtnRef = useRef<HTMLDivElement>(null);
 
   const onChangeAvatarClick = (e: MouseEvent) => {
     avatarInputRef.current?.click();
@@ -46,30 +52,44 @@ export default function HeaderNav() {
     }
   }
 
+  useEffect(() => {
+    if (!newPostBtnRef.current) return;
+
+    if (userBehavior.scrollDirection === "up") {
+      newPostBtnRef.current.style.opacity = "1";
+      newPostBtnRef.current.style.scale = "1";
+    } else if (userBehavior.scrollDirection === "down") {
+      newPostBtnRef.current.style.opacity = "0";
+      newPostBtnRef.current.style.scale = "0";
+    }
+  }, [userBehavior]);
+
   return (
-    <header className="w-full bg-white absolute bottom-0 left-0 z-10">
-      <div className="nav-wrapper ml-auto flex-auto flex justify-between px-3">
-        <div className={navItemClass} onClick={() => setSearchOpen(true)}>
-          <div className={navItemIconClass}><FontAwesomeIcon icon={faPager} width="1rem" height="1rem" /></div>
-          <div className={navItemTextClass}>Pages</div>
-        </div>
-        <div className={navItemClass} onClick={() => setSearchOpen(true)}>
-          <div className={navItemIconClass}><FontAwesomeIcon icon={faUserGroup} width="1rem" height="1rem" /></div>
-          <div className={navItemTextClass}>Groups</div>
-        </div>
-        <div className={navItemClass} onClick={() => setSearchOpen(true)}>
-          <div className={navItemActiveIconClass}><FontAwesomeIcon className="" icon={faHome} width="1rem" height="1rem" /></div>
-          <div className={navItemActiveTextClass}>Home</div>
-        </div>
-        <div className={navItemClass} onClick={() => setSearchOpen(true)}>
-          <div className={navItemIconClass}><FontAwesomeIcon icon={faSearch} width="1rem" height="1rem" /></div>
-          <div className={navItemTextClass}>Search</div>
-        </div>
+    <header className="w-full bg-white fixed bottom-0 left-0 z-10">
+      <div className="nav-wrapper ml-auto flex-auto flex justify-between">
+        {mainMenuItems.map((menu, index) => {
+          const isActive = menu.path === pathname;
+          return (
+            <Link key={index} href={menu.path} className={isActive ? navItemActiveClass : navItemClass} >
+              <div className={isActive ? navItemActiveIconClass : navItemIconClass}>
+                <FontAwesomeIcon icon={menu.icon} />
+              </div>
+            </Link>
+          )
+        })}
         <div className={navItemClass} onClick={() => { setMenuOpen(true) }}>
-          <div className={navItemIconClass}><FontAwesomeIcon className="" icon={faBars} width="1rem" height="1rem" /></div>
-          <div className={navItemTextClass}>Menu</div>
+          <div className={pathname === null ? navItemActiveIconClass : navItemIconClass}><FontAwesomeIcon icon={faBars} /></div>
         </div>
       </div>
+      {pathname === FAKEBOOK_NEWSFEED_URL && (
+        <div
+          className="absolute z-10 right-3 bottom-full mb-3 w-14 h-14 rounded-full shadow-md bg-blue-100 text-blue-600 transition-all"
+          ref={newPostBtnRef}>
+          <CircleIconButton icon={faPlus} aria-label="New Post" className="w-full h-full" size="medium" color="inherit"
+            onClick={() => setNewPostModalOpen(true)}
+          />
+        </div>
+      )}
       <div className={`absolute bottom-0 left-0 right-0 z-10`}>
         <div
           className={`h-svh absolute bottom-0 right-0 bg-black transition-opacity ease-in-out duration-200 ${menuOpen ? "opacity-50 w-full" : "opacity-0 w-0"}`}
@@ -102,8 +122,6 @@ export default function HeaderNav() {
                     </Link>
                   </div>
                 </div>
-                <div className="mb-3 p-2 bg-gray-200 rounded-md">Newsfeed</div>
-                <div className="mb-3 p-2 bg-gray-200 rounded-md">Stories</div>
                 <div className="mb-3 p-2 bg-gray-200 rounded-md">Profile</div>
                 <div className="mb-3 p-2 bg-gray-200 rounded-md">Settings</div>
               </>

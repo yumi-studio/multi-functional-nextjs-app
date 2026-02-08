@@ -9,6 +9,7 @@ export type FakebookState = {
   posts: Post[];
   newPostModalOpen: boolean;
   newPostMediaPreviewOpen: boolean;
+  newPostButtonVisible: boolean;
   setActiveProfile: (profile: Profile | null) => void;
   setCurrentPost: (post: Post | null) => void;
   setPosts: (posts: Post[]) => void;
@@ -16,6 +17,7 @@ export type FakebookState = {
   removePost: (id: string) => void;
   setNewPostModalOpen: (open: boolean) => void;
   setNewPostMediaPreviewOpen: (open: boolean) => void;
+  setNewPostButtonVisible: (visible: boolean) => void;
 };
 
 export const useFakebookStore = create<FakebookState>((set) => ({
@@ -24,6 +26,7 @@ export const useFakebookStore = create<FakebookState>((set) => ({
   posts: [],
   newPostModalOpen: false,
   newPostMediaPreviewOpen: false,
+  newPostButtonVisible: true,
   setActiveProfile: (profile) => set({ activeProfile: profile }),
   setCurrentPost: (post) => set({ currentPost: post }),
   setPosts: (posts) => set({ posts }),
@@ -31,4 +34,5 @@ export const useFakebookStore = create<FakebookState>((set) => ({
   removePost: (id: string) => set((state) => ({ posts: state.posts.filter(post => post.id !== id) })),
   setNewPostModalOpen: (open) => set({ newPostModalOpen: open }),
   setNewPostMediaPreviewOpen: (open) => set({ newPostMediaPreviewOpen: open }),
+  setNewPostButtonVisible: (visible) => set({ newPostButtonVisible: visible })
 }));
