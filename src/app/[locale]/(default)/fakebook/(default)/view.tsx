@@ -56,7 +56,7 @@ export default function View() {
   }, []);
 
   return (
-    <div className="bg-[rgba(0,0,0,0.1)] w-full h-full m-auto overflow-auto backdrop-blur-md">
+    <div className="w-full h-full m-auto overflow-auto">
       <div className="text-center bg-white rounded-b-md py-2">
         <span><b>Select Profile</b></span>
       </div>
@@ -64,12 +64,15 @@ export default function View() {
         {profiles.map((profile) => (
           <div
             key={profile.id}
-            className={`border border-gray-500 ${selectedProfile?.id === profile.id ? "border-l-4" : ""}`
+            className={`transition-all border-0 border-blue-600 ${selectedProfile?.id === profile.id ? "font-bold border-x-8" : ""}`
               + ` rounded-md bg-white p-2 mb-2 `}
             onClick={() => onProfileSelect(profile)}>
             <span>{profile.name}</span>
           </div>
         ))}
+        {profiles.length > 0 && (
+          <div className="my-2 h-0 border-t-2 border-t-gray-600"></div>
+        )}
         <form className="flex bg-white border border-gray-500 rounded-md overflow-hidden">
           <input className="flex-auto p-2 outline-none"
             type="text" value={newProfileName} onChange={e => setNewProfileName(e.target.value)}

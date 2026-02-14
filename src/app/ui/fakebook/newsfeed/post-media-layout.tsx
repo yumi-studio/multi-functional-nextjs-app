@@ -104,7 +104,6 @@ const OverThreeItemsLayout = ({ items, setGallery }: LayoutProps) => {
   )
 }
 
-
 export default function PostMediaLayout({ items, setGallery }: LayoutProps) {
   if (items.length === 0) return;
   if (items.length === 1) return <OneItemLayout items={items} setGallery={setGallery} />;

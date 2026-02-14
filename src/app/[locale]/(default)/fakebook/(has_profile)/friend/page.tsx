@@ -1,7 +1,12 @@
+import { Metadata } from "next";
+import View from "./view";
+
+export const metadata: Metadata = {
+  title: "Friends Management"
+}
+
 const Page = async () => {
-  return (
-    <>Friend Page</>
-  )
+  return <View />
 }
 
 export default Page;

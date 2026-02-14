@@ -2,7 +2,7 @@ import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { Button } from "@/app/ui/buttons";
+import { NormalButton } from "@/app/ui/buttons";
 
 export default function Complete() {
   const t = useTranslations();
@@ -13,9 +13,9 @@ export default function Complete() {
           <FontAwesomeIcon icon={faCircleCheck} size="5x" color="green"/>
         </div>
         <div className="my-2">{t("signup.complete")}</div>
-        <Button className="my-2">
+        <NormalButton className="my-2">
           <Link href={"/signin"}>{t("signup.to_login")}</Link>
-        </Button>
+        </NormalButton>
       </div>
     </>
   )

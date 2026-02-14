@@ -4,6 +4,9 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import Complete from "./complete";
 import { authService } from "@/app/services/auth.service";
+import { LinkButton, NormalButton } from "../buttons";
+import { Link } from "@/i18n/navigation";
+import { SIGNIN_URL } from "@/app/lib/url_paths";
 
 type SignupState = "begin" | "submit" | "fail" | "complete" | "end";
 
@@ -262,17 +265,17 @@ export default function SignUpForm() {
               </div>
             )}
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition mb-3"
-          >
-            {(signupState === "begin" || signupState === "fail") && (
-              <span>{t("signup.submit")}</span>
-            )}
-            {signupState === "submit" && (
-              <span>{t("signup.submiting")}</span>
-            )}
-          </button>
+          <div className="flex flex-col gap-3 mb-3">
+            <NormalButton variant="contained" fullWidth type="submit">
+              {(signupState === "begin" || signupState === "fail") && (
+                <span>{t("signup.submit")}</span>
+              )}
+              {signupState === "submit" && (
+                <span>{t("signup.submiting")}</span>
+              )}
+            </NormalButton>
+            <LinkButton url={SIGNIN_URL} variant="outlined" fullWidth>Back to login</LinkButton>
+          </div>
         </form>
       </div>
     </>
