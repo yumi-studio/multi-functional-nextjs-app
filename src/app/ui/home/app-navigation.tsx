@@ -1,4 +1,4 @@
-import { DUTUBE_URL, FAKEBOOK_URL } from "@/app/lib/url_paths";
+import { DUTUBE_URL, FAKEBOOK_URL, FAMILY_FINANCE_URL } from "@/app/lib/url_paths";
 import { Button } from "@mui/material";
 import Link from "next/link";
 
@@ -12,6 +12,7 @@ export default function AppNavigation() {
   const APP_LIST: APP_ITEM[] = [
     { title: "Fakebook", url: FAKEBOOK_URL },
     { title: "Dutube", url: DUTUBE_URL },
+    { title: "Family Finance", url: FAMILY_FINANCE_URL },
   ];
 
   return (
