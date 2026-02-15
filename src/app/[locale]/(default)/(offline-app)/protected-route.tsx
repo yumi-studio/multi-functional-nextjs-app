@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OFFLINE_ACCOUNT_LOGIN_URL } from "@/app/lib/url_paths";
-import { useOfflineAccountStore } from "./offline-account/store";
 import { Box, CircularProgress } from "@mui/material";
+import { useAccountStore } from "@/app/lib/offline-apps/modules/account/account.store";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const { currentAccount, isInitialized, initDB } = useOfflineAccountStore();
+  const { currentAccount, isInitialized, initDB } = useAccountStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         
         // Check after a small delay to ensure state is updated
         setTimeout(() => {
-          const { currentAccount: account } = useOfflineAccountStore.getState();
+          const { currentAccount: account } = useAccountStore.getState();
           if (!account) {
             router.push(OFFLINE_ACCOUNT_LOGIN_URL);
           } else {

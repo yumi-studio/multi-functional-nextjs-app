@@ -1,4 +1,3 @@
-import { OFFLINE_APP_FAMFIN_URL } from "@/app/lib/url_paths";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from 'next-intl/plugin';
 
@@ -58,11 +57,6 @@ const nextConfig: NextConfig = {
         ],
       },
     ]
-  },
-  async rewrites() {
-    return [
-      { source: "/:locale" + OFFLINE_APP_FAMFIN_URL, destination: "/:locale/famfin" }
-    ];
   },
   // reactStrictMode: false
 };

@@ -1,16 +1,17 @@
 'use client';
 
-import { useOfflineAccountStore } from '../offline-account/store';
-import { Container, Box, Card, CardContent, Typography, Avatar, Button } from '@mui/material';
+import { Container, Box, Card, CardContent, Typography, Avatar, Button, CardActions } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
-import { OFFLINE_ACCOUNT_LOGIN_URL, OFFLINE_APP_FAMFIN_URL } from '@/app/lib/url_paths';
-import ProtectedRoute from '../protected-route';
+import { OFFLINE_ACCOUNT_LOGIN_URL, OFFLINE_FAMFIN_URL } from '@/app/lib/url_paths';
 import { Link } from '@/i18n/navigation';
+import { useAccountStore } from '@/app/lib/offline-apps/modules/account/account.store';
+import { NormalButton } from '@/app/ui/buttons';
+import { resetDB } from '@/app/lib/offline-apps/database/indexdb';
 
 export default function Page() {
-  const { currentAccount, logout } = useOfflineAccountStore();
+  const { currentAccount, logout } = useAccountStore();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -19,8 +20,8 @@ export default function Page() {
   };
 
   return (
-    <ProtectedRoute>
-      <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      {currentAccount && (
         <Box sx={{ mb: 4 }}>
           {/* Header Card */}
           <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
@@ -78,21 +79,25 @@ export default function Page() {
             </CardContent>
           </Card>
         </Box>
+      )}
 
-        {/* Main Content */}
-        <Link href={OFFLINE_APP_FAMFIN_URL}>
-          <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
-            <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2, color: '#333' }}>
-                🏠 Quản lý Tài Chính Gia Đình
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#666', lineHeight: 1.8 }}>
-                Tính năng này sẽ được phát triển...
-              </Typography>
-            </CardContent>
-          </Card>
-        </Link>
-      </Container>
-    </ProtectedRoute>
+      {/* Main Content */}
+      <Link href={OFFLINE_FAMFIN_URL}>
+        <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2, color: '#333' }}>Quản lý Tài Chính Gia Đình</Typography>
+            <Typography variant="body1" sx={{ color: '#666', lineHeight: 1.8 }}>
+              Tính năng này sẽ được phát triển...
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{ boxShadow: 3, borderRadius: 2, my: '12px' }}>
+          <CardActions sx={{ alignItems: 'center', justifyContent: 'center' }}>
+            <NormalButton variant='contained' color='error' type='button' onClick={() => resetDB()}>Reset Data</NormalButton>
+          </CardActions>
+        </Card>
+      </Link>
+    </Container>
   );
 }

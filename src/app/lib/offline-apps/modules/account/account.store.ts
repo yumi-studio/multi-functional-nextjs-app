@@ -1,26 +1,11 @@
-import { create } from 'zustand';
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
+"use client";
 
-export interface OfflineAccount {
-  id: string;
-  username: string;
-  password: string;
-  avatar: string | null;
-  createdAt: string;
-}
+import { create } from "zustand";
+import { getDB } from "../../database/indexdb";
+import { OfflineAccount } from "./account.schema";
 
-interface YumiDB extends DBSchema {
-  accounts: {
-    key: string;
-    value: OfflineAccount;
-  };
-  currentAccount: {
-    key: string;
-    value: OfflineAccount | null;
-  };
-}
 
-interface OfflineAccountStore {
+interface AccountStore {
   accounts: OfflineAccount[];
   currentAccount: OfflineAccount | null;
   isInitialized: boolean;
@@ -32,25 +17,7 @@ interface OfflineAccountStore {
   logout: () => Promise<void>;
 }
 
-let db: IDBPDatabase<YumiDB> | null = null;
-
-const getDB = async () => {
-  if (!db) {
-    db = await openDB<YumiDB>('yumi-offline', 2, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains('accounts')) {
-          db.createObjectStore('accounts', { keyPath: 'id' });
-        }
-        if (!db.objectStoreNames.contains('currentAccount')) {
-          db.createObjectStore('currentAccount');
-        }
-      },
-    });
-  }
-  return db;
-};
-
-export const useOfflineAccountStore = create<OfflineAccountStore>((set, get) => {
+export const useAccountStore = create<AccountStore>((set, get) => {
   return {
     accounts: [],
     currentAccount: null,
@@ -58,10 +25,10 @@ export const useOfflineAccountStore = create<OfflineAccountStore>((set, get) => 
 
     initDB: async () => {
       if (typeof window === 'undefined') return;
-      
+
       try {
         const database = await getDB();
-        
+
         // Load accounts from IndexDB
         const accountsTx = database.transaction('accounts', 'readonly');
         const accountsStore = accountsTx.objectStore('accounts');
@@ -101,7 +68,7 @@ export const useOfflineAccountStore = create<OfflineAccountStore>((set, get) => 
       try {
         const database = await getDB();
         const tx = database.transaction('currentAccount', 'readwrite');
-        
+
         if (account) {
           await tx.objectStore('currentAccount').put(account, 'current');
         } else {
@@ -119,12 +86,12 @@ export const useOfflineAccountStore = create<OfflineAccountStore>((set, get) => 
         const database = await getDB();
         const tx = database.transaction('accounts', 'readwrite');
         const store = tx.objectStore('accounts');
-        
+
         const account = await store.get(id);
         if (account) {
           const updatedAccount = { ...account, ...updates };
           await store.put(updatedAccount);
-          
+
           set((state) => ({
             accounts: state.accounts.map((acc) =>
               acc.id === id ? updatedAccount : acc

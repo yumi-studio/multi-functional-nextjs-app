@@ -1,53 +1,9 @@
-import { create } from 'zustand';
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
+"use client";
 
-export interface Wallet {
-  id: string;
-  name: string;
-  balance: number;
-  currency: string;
-  accountId: string;
-  createdAt: string;
-}
+import { create } from "zustand";
+import { getDB } from "../../database/indexdb";
+import { Wallet, Transaction, WishItem } from "./famfin.schema";
 
-export interface Transaction {
-  id: string;
-  walletId: string;
-  type: 'income' | 'expense';
-  amount: number;
-  description: string;
-  category: string;
-  date: string;
-  accountId: string;
-  createdAt: string;
-}
-
-export interface WishItem {
-  id: string;
-  name: string;
-  targetAmount: number;
-  currentAmount: number;
-  category: string;
-  priority: 'low' | 'medium' | 'high';
-  dueDate: string | null;
-  accountId: string;
-  createdAt: string;
-}
-
-interface FamFinDB extends DBSchema {
-  wallets: {
-    key: string;
-    value: Wallet;
-  };
-  transactions: {
-    key: string;
-    value: Transaction;
-  };
-  wishItems: {
-    key: string;
-    value: WishItem;
-  };
-}
 
 interface FamFinStore {
   wallets: Wallet[];
@@ -55,19 +11,19 @@ interface FamFinStore {
   wishItems: WishItem[];
   isInitialized: boolean;
   initDB: () => Promise<void>;
-  
+
   // Wallet operations
   createWallet: (name: string, currency: string, accountId: string) => Promise<void>;
   addMoneyToWallet: (walletId: string, amount: number, description: string) => Promise<void>;
   withdrawMoneyFromWallet: (walletId: string, amount: number, description: string) => Promise<void>;
   getWalletById: (walletId: string) => Wallet | undefined;
   deleteWallet: (walletId: string) => Promise<void>;
-  
+
   // Transaction operations
   getTransactionsByWallet: (walletId: string) => Transaction[];
   getTransactionsByAccountId: (accountId: string) => Transaction[];
   deleteTransaction: (transactionId: string) => Promise<void>;
-  
+
   // Wish item operations
   createWishItem: (name: string, targetAmount: number, category: string, priority: 'low' | 'medium' | 'high', accountId: string, dueDate?: string) => Promise<void>;
   addToWishItem: (wishItemId: string, amount: number) => Promise<void>;
@@ -75,27 +31,6 @@ interface FamFinStore {
   updateWishItem: (wishItemId: string, updates: Partial<WishItem>) => Promise<void>;
   getWishItemsByAccountId: (accountId: string) => WishItem[];
 }
-
-let db: IDBPDatabase<FamFinDB> | null = null;
-
-const getDB = async () => {
-  if (!db) {
-    db = await openDB<FamFinDB>('yumi-offline', 2, {
-      upgrade(db, oldVersion, newVersion, transaction) {
-        if (!db.objectStoreNames.contains('wallets')) {
-          db.createObjectStore('wallets', { keyPath: 'id' });
-        }
-        if (!db.objectStoreNames.contains('transactions')) {
-          db.createObjectStore('transactions', { keyPath: 'id' });
-        }
-        if (!db.objectStoreNames.contains('wishItems')) {
-          db.createObjectStore('wishItems', { keyPath: 'id' });
-        }
-      },
-    });
-  }
-  return db;
-};
 
 export const useFamFinStore = create<FamFinStore>((set, get) => {
   return {

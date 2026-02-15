@@ -16,8 +16,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
-import { OFFLINE_ACCOUNT_CREATE_URL, OFFLINE_APP_FAMFIN_URL, OFFLINE_ACCOUNT_LOGIN_URL } from '@/app/lib/url_paths';
-import { useOfflineAccountStore } from '../store';
+import { OFFLINE_ACCOUNT_CREATE_URL, OFFLINE_ACCOUNT_LOGIN_URL, OFFLINE_APP_URL } from '@/app/lib/url_paths';
+import { useAccountStore } from '@/app/lib/offline-apps/modules/account/account.store';
+import { LinkButton } from '@/app/ui/buttons';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
-  const { accounts, setCurrentAccount, initDB } = useOfflineAccountStore();
+  const { accounts, setCurrentAccount, initDB } = useAccountStore();
 
   useEffect(() => {
     const initializeDB = async () => {
@@ -75,7 +76,7 @@ export default function LoginPage() {
       // Set current account and redirect
       await setCurrentAccount(account);
       setLoading(false);
-      router.push(OFFLINE_APP_FAMFIN_URL);
+      router.push(OFFLINE_APP_URL);
     } catch (err) {
       setError('Đã xảy ra lỗi khi đăng nhập');
       setLoading(false);
@@ -280,6 +281,10 @@ export default function LoginPage() {
               <Typography variant="caption" sx={{ color: '#666', display: 'block', mb: 1 }}>
                 <strong>💡 Gợi ý:</strong> Tạo một tài khoản mới hoặc sử dụng tài khoản ngoại tuyến đã tạo
               </Typography>
+            </Box>
+
+            <Box sx={{ textAlign: 'center', mt: '12px' }}>
+              <LinkButton url={OFFLINE_APP_URL} variant='outlined'>Home | Offline Apps Center</LinkButton>
             </Box>
           </CardContent>
         </Card>

@@ -6,7 +6,6 @@ import {
   Box,
   Card,
   CardContent,
-  CardHeader,
   Button,
   Typography,
   Tab,
@@ -22,10 +21,6 @@ import {
   FormControl,
   InputLabel,
   Alert,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
   IconButton,
   Table,
   TableBody,
@@ -45,15 +40,12 @@ import {
   faHeart,
   faPlus,
   faTrash,
-  faEdit,
-  faArrowUp,
-  faArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import { OFFLINE_ACCOUNT_LOGIN_URL } from '@/app/lib/url_paths';
-import { useOfflineAccountStore } from '../offline-account/store';
-import { useFamFinStore } from './store';
-import ProtectedRoute from '../protected-route';
+import { useAccountStore } from '@/app/lib/offline-apps/modules/account/account.store';
+import { useFamFinStore } from '@/app/lib/offline-apps/modules/famfin/famfin.store';
+import ProtectedRoute from '../../protected-route';
 
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
@@ -72,7 +64,7 @@ function TabPanel(props: any) {
 }
 
 export default function FamFinPage() {
-  const { currentAccount, logout } = useOfflineAccountStore();
+  const { currentAccount, logout } = useAccountStore();
   const { wallets, transactions, wishItems, initDB, createWallet, addMoneyToWallet, withdrawMoneyFromWallet, createWishItem, addToWishItem, deleteWallet, deleteWishItem, getTransactionsByAccountId, getWishItemsByAccountId } = useFamFinStore();
   const router = useRouter();
   const [tabValue, setTabValue] = useState(0);

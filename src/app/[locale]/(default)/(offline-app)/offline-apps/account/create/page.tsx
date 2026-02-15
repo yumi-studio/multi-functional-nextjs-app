@@ -18,12 +18,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faImage, faCheckCircle, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import { OFFLINE_ACCOUNT_LOGIN_URL } from '@/app/lib/url_paths';
-import { useOfflineAccountStore } from '../store';
+import { useAccountStore } from '@/app/lib/offline-apps/modules/account/account.store';
 
 export default function CreateAccountPage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -33,8 +33,8 @@ export default function CreateAccountPage() {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
-  
-  const { accounts, addAccount, initDB } = useOfflineAccountStore();
+
+  const { accounts, addAccount, initDB } = useAccountStore();
 
   useEffect(() => {
     const initializeDB = async () => {
@@ -152,21 +152,21 @@ export default function CreateAccountPage() {
       };
 
       await addAccount(newAccount);
-      
+
       setSuccess('Tài khoản đã được tạo thành công!');
-      
+
       // Reset form
       setUsername('');
       setPassword('');
       setConfirmPassword('');
       setAvatar('');
       setAvatarPreview('');
-      
+
       // Redirect to login after 2 seconds
       setTimeout(() => {
         router.push(OFFLINE_ACCOUNT_LOGIN_URL);
       }, 2000);
-      
+
     } catch (err) {
       setError('Đã xảy ra lỗi khi tạo tài khoản');
     } finally {
@@ -259,7 +259,7 @@ export default function CreateAccountPage() {
                   <FontAwesomeIcon icon={faImage} style={{ marginRight: 8 }} />
                   Ảnh Đại Diện
                 </Typography>
-                
+
                 <input
                   ref={fileInputRef}
                   type="file"
