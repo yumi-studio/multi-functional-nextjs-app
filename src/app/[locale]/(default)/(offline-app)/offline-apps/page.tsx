@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Container, Box, Card, CardContent, Typography, Avatar, Button, CardActions } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -9,15 +10,27 @@ import { Link } from '@/i18n/navigation';
 import { useAccountStore } from '@/app/lib/offline-apps/modules/account/account.store';
 import { NormalButton } from '@/app/ui/buttons';
 import { resetDB } from '@/app/lib/offline-apps/database/indexdb';
+import { useBackupStore } from '@/app/lib/offline-apps/modules/backup/backup.store';
 
 export default function Page() {
   const { currentAccount, logout } = useAccountStore();
+  const { currentBackup, setCurrentBackup } = useBackupStore();
   const router = useRouter();
 
   const handleLogout = async () => {
     await logout();
     router.push(OFFLINE_ACCOUNT_LOGIN_URL);
   };
+
+  const handleEnableBackup = async () => {
+
+  };
+
+  useEffect(() => {
+    if (currentAccount) {
+      
+    }
+  }, [currentAccount]);
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
@@ -91,9 +104,17 @@ export default function Page() {
             </Typography>
           </CardContent>
         </Card>
+        {currentAccount && (
+          <Card sx={{ boxShadow: 3, borderRadius: 2, my: '12px' }}>
+            <CardActions sx={{ alignItems: 'center', justifyContent: 'start' }}>
 
+              <NormalButton variant='contained' color='primary' type='button' onClick={() => { }}>
+                <span>Enable Backup</span>
+              </NormalButton>          </CardActions>
+          </Card>
+        )}
         <Card sx={{ boxShadow: 3, borderRadius: 2, my: '12px' }}>
-          <CardActions sx={{ alignItems: 'center', justifyContent: 'center' }}>
+          <CardActions sx={{ alignItems: 'center', justifyContent: 'start' }}>
             <NormalButton variant='contained' color='error' type='button' onClick={() => resetDB()}>Reset Data</NormalButton>
           </CardActions>
         </Card>

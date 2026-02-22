@@ -5,16 +5,19 @@ import { useRouter } from "next/navigation";
 import { OFFLINE_ACCOUNT_LOGIN_URL } from "@/app/lib/url_paths";
 import { Box, CircularProgress } from "@mui/material";
 import { useAccountStore } from "@/app/lib/offline-apps/modules/account/account.store";
+import { useBackupStore } from "@/app/lib/offline-apps/modules/backup/backup.store";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const { currentAccount, isInitialized, initDB } = useAccountStore();
+  const { currentAccount, isInitialized, initDB: initAccountDB } = useAccountStore();
+  const { currentBackup, initDB: initBackupDB } = useBackupStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initializeAndCheck = async () => {
       try {
-        await initDB();
+        await initAccountDB();
+        await initBackupDB();
         
         // Check after a small delay to ensure state is updated
         setTimeout(() => {
@@ -32,7 +35,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     };
 
     initializeAndCheck();
-  }, [router, initDB]);
+  }, [router, initAccountDB, initBackupDB]);
 
   if (isLoading || !isInitialized) {
     return (

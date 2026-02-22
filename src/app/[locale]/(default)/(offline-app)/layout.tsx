@@ -1,7 +1,9 @@
-const Layout = async ({ children }: {
+const OfflineAppLayout = async ({ children }: {
   children: React.ReactNode;
 }) => {
-  return children;
+  return (
+    children
+  );
 }
 
-export default Layout;
+export default OfflineAppLayout;

@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { OFFLINE_ACCOUNT_CREATE_URL, OFFLINE_ACCOUNT_LOGIN_URL, OFFLINE_APP_URL } from '@/app/lib/url_paths';
 import { useAccountStore } from '@/app/lib/offline-apps/modules/account/account.store';
 import { LinkButton } from '@/app/ui/buttons';
+import { useBackupStore } from '@/app/lib/offline-apps/modules/backup/backup.store';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -75,6 +76,7 @@ export default function LoginPage() {
 
       // Set current account and redirect
       await setCurrentAccount(account);
+      
       setLoading(false);
       router.push(OFFLINE_APP_URL);
     } catch (err) {

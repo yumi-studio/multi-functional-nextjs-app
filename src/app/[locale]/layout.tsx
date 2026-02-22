@@ -8,9 +8,6 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { Suspense } from "react";
-import Loading from "@/app/[locale]/loading";
-import { AuthProvider } from "@/app/context/AuthContext";
 import { AppProvider } from "../context/AppContext";
 
 const geistSans = Geist({
@@ -48,11 +45,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased text-sm`}>
         <NextIntlClientProvider>
-          <AppProvider>
-            <AuthProvider>
-              <Suspense fallback={<Loading />}>{children}</Suspense>
-            </AuthProvider>
-          </AppProvider>
+          <AppProvider>{children}</AppProvider>
         </NextIntlClientProvider>
         <ToastContainer />
       </body>
