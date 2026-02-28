@@ -51,7 +51,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     let lastScrollY = 0;
     let checkScrollTick = false;
-    const eventBlockContextMenu = (e: PointerEvent) => {
+    const eventBlockContextMenu = (e: MouseEvent) => {
       e.preventDefault();
     }
     const handleScroll = () => {
@@ -73,8 +73,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       lastScrollY = currentScrollY;
     };
 
-    document.addEventListener("contextmenu", eventBlockContextMenu);
-    document.addEventListener("scroll", handleScroll);
+    document.addEventListener<"contextmenu">("contextmenu", eventBlockContextMenu);
+    document.addEventListener<"scroll">("scroll", handleScroll);
 
     const checkResponseUnauthorized = apiClient.interceptors.response.use(
       (res) => {
