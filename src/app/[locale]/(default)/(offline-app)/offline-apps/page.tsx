@@ -5,7 +5,7 @@ import { Container, Box, Card, CardContent, Typography, Avatar, Button, CardActi
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
-import { OFFLINE_ACCOUNT_LOGIN_URL, OFFLINE_FAMFIN_URL } from '@/app/lib/url_paths';
+import { OFFLINE_600LYTHUYETOTO_URL, OFFLINE_ACCOUNT_LOGIN_URL, OFFLINE_FAMFIN_URL } from '@/app/lib/url_paths';
 import { Link } from '@/i18n/navigation';
 import { useAccountStore } from '@/app/lib/offline-apps/modules/account/account.store';
 import { NormalButton } from '@/app/ui/buttons';
@@ -16,6 +16,11 @@ export default function Page() {
   const { currentAccount, logout } = useAccountStore();
   const { currentBackup, setCurrentBackup } = useBackupStore();
   const router = useRouter();
+
+  const URLS = [
+    { path: OFFLINE_FAMFIN_URL, title: 'Quản lý Tài Chính Gia Đình' },
+    { path: OFFLINE_600LYTHUYETOTO_URL, title: '600 câu hỏi lý thuyết ô tô' },
+  ]
 
   const handleLogout = async () => {
     await logout();
@@ -28,7 +33,7 @@ export default function Page() {
 
   useEffect(() => {
     if (currentAccount) {
-      
+
     }
   }, [currentAccount]);
 
@@ -95,30 +100,31 @@ export default function Page() {
       )}
 
       {/* Main Content */}
-      <Link href={OFFLINE_FAMFIN_URL}>
-        <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
-          <CardContent sx={{ p: 4 }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2, color: '#333' }}>Quản lý Tài Chính Gia Đình</Typography>
-            <Typography variant="body1" sx={{ color: '#666', lineHeight: 1.8 }}>
-              Tính năng này sẽ được phát triển...
-            </Typography>
-          </CardContent>
+      {URLS.map((url, key) => (
+        <Card key={key} sx={{ boxShadow: 3, borderRadius: 2, my: '12px' }}>
+          <Link href={url.path}>
+            <CardContent sx={{ p: 4 }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2, color: '#333' }}>{url.title}</Typography>
+            </CardContent>
+          </Link>
         </Card>
-        {currentAccount && (
-          <Card sx={{ boxShadow: 3, borderRadius: 2, my: '12px' }}>
-            <CardActions sx={{ alignItems: 'center', justifyContent: 'start' }}>
+      ))}
 
-              <NormalButton variant='contained' color='primary' type='button' onClick={() => { }}>
-                <span>Enable Backup</span>
-              </NormalButton>          </CardActions>
-          </Card>
-        )}
+      {currentAccount && (
         <Card sx={{ boxShadow: 3, borderRadius: 2, my: '12px' }}>
           <CardActions sx={{ alignItems: 'center', justifyContent: 'start' }}>
-            <NormalButton variant='contained' color='error' type='button' onClick={() => resetDB()}>Reset Data</NormalButton>
-          </CardActions>
+
+            <NormalButton variant='contained' color='primary' type='button' onClick={() => { }}>
+              <span>Enable Backup</span>
+            </NormalButton>          </CardActions>
         </Card>
-      </Link>
+      )}
+
+      <Card sx={{ boxShadow: 3, borderRadius: 2, my: '12px' }}>
+        <CardActions sx={{ alignItems: 'center', justifyContent: 'start' }}>
+          <NormalButton variant='contained' color='error' type='button' onClick={() => resetDB()}>Reset Data</NormalButton>
+        </CardActions>
+      </Card>
     </Container>
   );
 }

@@ -1,3 +1,6 @@
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 export const formatDateTime = (datetime: Date | string) => {
   let targetDateTime: Date;
   if (datetime instanceof String) {
@@ -20,4 +23,8 @@ export const formatDateTime = (datetime: Date | string) => {
   const get = (type: string) => d.find(p => p.type === type)?.value;
 
   return `${get('day')}-${get('month')}-${get('year')} ${get('hour')}:${get('minute')}`;
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }

@@ -60,7 +60,7 @@ export const useBackupStore = create<BackupStore>((set, get) => {
         const tx = database.transaction('backup', 'readonly');
         const backup = await tx.objectStore('backup').get(id);
 
-        return backup;
+        return backup ?? null;
       } catch (err) {
         console.error('Error setCurrentBackup:', err);
         return null;

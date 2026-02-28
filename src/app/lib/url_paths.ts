@@ -19,3 +19,4 @@ export const OFFLINE_ACCOUNT_URL = OFFLINE_APP_URL + '/account';
 export const OFFLINE_ACCOUNT_LOGIN_URL = OFFLINE_ACCOUNT_URL + '/login';
 export const OFFLINE_ACCOUNT_CREATE_URL = OFFLINE_ACCOUNT_URL + '/create';
 export const OFFLINE_FAMFIN_URL = OFFLINE_APP_URL + '/famfin';
+export const OFFLINE_600LYTHUYETOTO_URL = OFFLINE_APP_URL + '/600lythuyetoto';
