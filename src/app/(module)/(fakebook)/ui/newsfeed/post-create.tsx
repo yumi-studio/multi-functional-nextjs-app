@@ -95,7 +95,7 @@ export default function PostCreate() {
             onClick={() => { onClose() }}
           />
         </div>
-        <div className="bg-gray-300 h-[1px] my-3"></div>
+        <div className="bg-gray-300 h-px my-3"></div>
         <form
           className="flex-auto overflow-auto"
         >

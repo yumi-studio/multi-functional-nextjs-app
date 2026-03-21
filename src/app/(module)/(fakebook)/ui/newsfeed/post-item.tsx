@@ -68,7 +68,7 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
           <FontAwesomeIcon icon={faBars}
             onClick={() => { setShowOptions(!showOptions) }}
             className="cursor-pointer" />
-          <div className={`absolute ${showOptions ? 'block' : 'hidden'} right-0 top-0 bg-white shadow-lg rounded-md pt-1 pb-1 pl-2 pr-2 border-[1px] border-gray-200 bg-white`}>
+          <div className={`absolute ${showOptions ? 'block' : 'hidden'} right-0 top-0 bg-white shadow-lg rounded-md pt-1 pb-1 pl-2 pr-2 border border-gray-200 bg-white`}>
             <ul className="w-[100px]">
               {activeProfile && post.creator.id === activeProfile.id && (
                 <>

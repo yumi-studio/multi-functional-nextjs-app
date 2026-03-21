@@ -33,7 +33,7 @@ export default function AccountBar() {
           <span>Welcome, {userDetail.firstName} {userDetail.lastName}!</span>
           <Button type="button" variant="contained" size="small" onClick={() => setShowLogout(true)}>Logout</Button>
           {showLogout && (
-            <div className="fixed top-1/2 left-1/2 z-[99999] transform -translate-1/2 w-9/12 h-auto bg-white border rounded-md">
+            <div className="fixed top-1/2 left-1/2 z-99999 transform -translate-1/2 w-9/12 h-auto bg-white border rounded-md">
               <div className="p-2 text-center">Are you sure?</div>
               <hr />
               <div className="p-2 flex gap-2 justify-center">

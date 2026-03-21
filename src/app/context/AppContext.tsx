@@ -125,7 +125,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       hideLoading: () => setLoading(prev => ({ enable: ((prev.count - 1) > 0), count: prev.count - 1 })),
     }}>
       {loading.enable && (
-        <div className="flex items-center justify-center bg-gray-50 opacity-50 absolute z-[9999] top-0 left-0 w-svw h-svh">
+        <div className="flex items-center justify-center bg-gray-50 opacity-50 absolute z-9999 top-0 left-0 w-svw h-svh">
           <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}

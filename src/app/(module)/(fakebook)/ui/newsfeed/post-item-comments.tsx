@@ -141,7 +141,7 @@ const PostCommentOptions = memo(
           <FontAwesomeIcon className="cursor-pointer" icon={faEllipsisVertical} onClick={(e) => { setOpen(o => !o) }} />
         </div>
         <div className={
-          `absolute top-1 right-full bg-white px-2 py-1.5 z-10 rounded-[0.5rem] w-30 whitespace-nowrap flex flex-col gap-1 outline-1 outline-gray-400 `
+          `absolute top-1 right-full bg-white px-2 py-1.5 z-10 rounded-lg w-30 whitespace-nowrap flex flex-col gap-1 outline-1 outline-gray-400 `
           + (open ? "" : "hidden")
         } ref={menuRef}>
           <div onClick={handleEdit}><FontAwesomeIcon className="" icon={faPenToSquare} />&nbsp;Edit</div>
@@ -268,7 +268,7 @@ export default function PostItemComments() {
             onClick={() => { onClose() }}
           />
         </div>
-        <div className="bg-gray-300 h-[1px] my-3"></div>
+        <div className="bg-gray-300 h-px my-3"></div>
         <div className="comments flex-auto overflow-auto" ref={commentsRef}>
           {comments && comments.map(comment => (
             <PostComment key={comment.id} comment={comment} isReply={false} changeReaction={changeReaction} />

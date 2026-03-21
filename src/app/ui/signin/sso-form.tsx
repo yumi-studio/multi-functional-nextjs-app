@@ -26,9 +26,9 @@ export default function SsoForm() {
   return (
     <div>
       <div className="text-center mb-2 flex justify-center items-center gap-3 px-3">
-        <div className="h-[1px] bg-gray-400 flex-auto"></div>
+        <div className="h-px bg-gray-400 flex-auto"></div>
         <div>Or</div>
-        <div className="h-[1px] bg-gray-400 flex-auto"></div>
+        <div className="h-px bg-gray-400 flex-auto"></div>
       </div>
       <div className="flex flex-col gap-3 mb-3">
         {externalAuth && Object.entries(externalAuth).map(entry => (
