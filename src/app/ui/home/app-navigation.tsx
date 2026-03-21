@@ -1,4 +1,6 @@
-import { DUTUBE_URL, FAKEBOOK_URL, OFFLINE_APP_URL, OFFLINE_FAMFIN_URL } from "@/app/lib/url_paths";
+"use client";
+
+import { FAKEBOOK_URL } from "@/app/lib/url_paths";
 import { Button } from "@mui/material";
 import Link from "next/link";
 
@@ -11,12 +13,21 @@ export default function AppNavigation() {
 
   const APP_LIST: APP_ITEM[] = [
     { title: "Fakebook", url: FAKEBOOK_URL },
-    { title: "Dutube", url: DUTUBE_URL },
-    { title: "Offline Apps", url: OFFLINE_APP_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
+    { title: "Fakebook", url: FAKEBOOK_URL },
   ];
 
   return (
-    <div className="app-nav flex flex-wrap justify-start items-start gap-2 py-2">
+    <div className="flex flex-wrap justify-start items-start gap-2 py-2">
       {APP_LIST &&
         APP_LIST.map((item, index) => (
           <Button
