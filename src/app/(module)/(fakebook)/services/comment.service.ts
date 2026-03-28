@@ -1,4 +1,4 @@
-import { Comment, CommentStatistic, ReactionType } from "@/app/lib/fakebook/definitions";
+import { Comment, CommentStatistic, ReactionType } from "../lib/definitions";
 import { API_FAKEBOOK_COMMENT_DELETE, API_FAKEBOOK_COMMENT_DETAIL, API_FAKEBOOK_COMMENT_REACT, API_FAKEBOOK_COMMENT_STATISTIC, API_FAKEBOOK_COMMENT_UPDATE, API_FAKEBOOK_POST_COMMENT_CREATE } from "../../../services/api-endpoints";
 import BaseService, { Response } from "../../../services/base.service";
 

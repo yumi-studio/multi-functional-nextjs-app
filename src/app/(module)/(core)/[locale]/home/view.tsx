@@ -1,14 +1,20 @@
-import AccountBar from "@/app/ui/home/account-bar";
-import AppNavigation from "@/app/ui/home/app-navigation";
+"use client";
+
+import Image from "next/image";
 
 const View = () => {
   return (
-    // <div className="w-full max-w-80 m-auto h-svh px-2">
-    //   <AccountBar />
-    //   <hr color="black" />
-    //   <AppNavigation />
-    // </div>
-    <div className="w-svw h-svh relative z-0 "></div> 
+    <>
+      <div className="mt-16">
+        {[1, 2, 3, 4, 5].map((idx) => {
+          return (
+            <section key={idx} className="w-full">
+              <Image src="/fakebook-bg.png" alt="zzz" width="640" height="320" className="w-full h-full object-cover" />
+            </section>
+          )
+        })}
+      </div>
+    </>
   )
 }
 

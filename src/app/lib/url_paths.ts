@@ -3,6 +3,10 @@ export const SIGNIN_URL = "/signin";
 export const SIGNUP_URL = "/signup";
 
 export const HOME_URL = "/home";
+export const PROJECTS_URL = "/projects";
+export const ABOUT_URL = "/about";
+export const CONTACT_URL = "/contact";
+export const ACCOUNT_URL = "/account";
 
 export const FAKEBOOK_URL = "/fakebook";
 export const FAKEBOOK_NEWSFEED_URL = "/fakebook/newsfeed";

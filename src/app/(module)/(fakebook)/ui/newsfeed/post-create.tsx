@@ -1,6 +1,6 @@
 "use client";
 
-import { UploadMediaFile } from "@/app/lib/fakebook/definitions";
+import { UploadMediaFile } from "../../lib/definitions";
 import { postService } from "@/app/(module)/(fakebook)/services/post.service";
 import { FakebookState, useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
 import { SimpleDialog } from "@/app/ui/dialogs";

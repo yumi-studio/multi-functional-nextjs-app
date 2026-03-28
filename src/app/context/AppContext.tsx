@@ -6,6 +6,7 @@ import { HttpStatusCode } from "axios";
 import { userIdb } from "@/app/lib/indexDb";
 import apiClient from "@/app/services/api-client";
 import { useUserStore } from "@/app/stores/user-store";
+import ThemeSwitcher from "../ui/theme-switcher";
 
 type UserConfig = {
   remember_login: boolean;
@@ -111,7 +112,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     userIdb.set('config', userConfig);
-  }, [userConfig])
+  }, [userConfig]);
 
   return (
     <AppContext.Provider value={{

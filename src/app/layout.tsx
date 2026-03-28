@@ -7,7 +7,8 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { Flip, ToastContainer } from "react-toastify";
+import { ThemeProvider } from "next-themes";
 import { AppProvider } from "./context/AppContext";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -43,16 +44,33 @@ export default function RootLayout({
 }>) {
   return (
     <html>
+      <head>
+        <meta name="color-scheme" content="light dark" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextIntlClientProvider>
           <AppProvider>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
+            <ThemeProvider defaultTheme="light" attribute='class' storageKey="theme">
+              <AuthProvider>
+                {children}
+              </AuthProvider>
+            </ThemeProvider>
           </AppProvider>
         </NextIntlClientProvider>
-        <ToastContainer />
+        <ToastContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable={false}
+          pauseOnHover={false}
+          theme="light"
+          transition={Flip}
+        />
       </body>
     </html>
   );

@@ -4,6 +4,9 @@ import { SIGNIN_URL, SIGNUP_URL } from "@/app/lib/url_paths";
 import { authService } from "@/app/services/auth.service";
 import { useUserStore } from "@/app/stores/user-store";
 import { Link } from "@/i18n/navigation";
+import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
+import { faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -27,7 +30,7 @@ export default function AccountBar() {
   }
 
   return (
-    <div className="top-nav flex gap-2 py-2">
+    <div className="flex gap-2 py-2">
       {userDetail && (
         <div className="w-full flex justify-between items-center">
           <span>Welcome, {userDetail.firstName} {userDetail.lastName}!</span>
@@ -45,14 +48,10 @@ export default function AccountBar() {
         </div>
       )}
       {!userDetail && (
-        <div className="w-full flex gap-2">
-          <Button type="button" variant="contained">
-            <Link href={SIGNIN_URL}>{t("page.title.signin")}</Link>
-          </Button>
-          <Button type="button" variant="outlined">
-            <Link href={SIGNUP_URL}>{t("page.title.signup")}</Link>
-          </Button>
-        </div>
+        <Link href={SIGNIN_URL} className="text-white inline-flex items-center gap-2 border border-white px-3">
+          <span>{t("page.title.signin")}</span>
+          <FontAwesomeIcon icon={faChevronCircleRight} />
+        </Link>
       )}
     </div>
   )

@@ -1,6 +1,6 @@
 "use client";
 
-import { Comment, ReactionType } from "@/app/lib/fakebook/definitions";
+import { Comment, ReactionType } from "../../lib/definitions";
 import { commentService } from "@/app/(module)/(fakebook)/services/comment.service";
 import { postService } from "@/app/(module)/(fakebook)/services/post.service";
 import { useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
