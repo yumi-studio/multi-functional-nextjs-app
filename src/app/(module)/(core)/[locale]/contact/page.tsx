@@ -1,7 +1,10 @@
+import ConnectOrbit from "./ConnectOrbit";
+
 const ContactPage = async () => {
   return (
-    <>Page Contact</>
-  )
-}
+    <div className="w-full h-full">
+    </div>
+  );
+};
 
 export default ContactPage;

@@ -1,3 +1,14 @@
 {
-  
+  "header": {
+    "nav": {
+      "home": "Trang chủ",
+      "about": "Giới thiệu",
+      "contact": "Liên hệ",
+      "projects": "Dự án"
+    }
+  },
+  "home": {
+    "nav_title": "Trang chủ",
+    "page_title": "Trang chủ"
+  }
 }
