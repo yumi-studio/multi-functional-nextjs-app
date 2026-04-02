@@ -11,6 +11,7 @@ import { Flip, ToastContainer } from "react-toastify";
 import { ThemeProvider } from "next-themes";
 import { AppProvider } from "./context/AppContext";
 import { AuthProvider } from "./context/AuthContext";
+import { APP_NAME } from "./lib/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,11 +25,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: `%s | Duy's NextGen`,
-    default: "Duy's NextGen",
+    template: `%s | ${APP_NAME}`,
+    default: APP_NAME
   },
   description: "It's never too late to learn new things.",
-};
+}
 
 export const viewport: Viewport = {
   width: "device-width",

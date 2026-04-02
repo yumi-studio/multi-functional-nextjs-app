@@ -1,4 +1,9 @@
+import { Metadata } from "next";
 import { getLocale } from "next-intl/server";
+
+export const metadata: Metadata = {
+  title: "About"
+}
 
 const AboutPage = async () => {
   const locale = await getLocale();
