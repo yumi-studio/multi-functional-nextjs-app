@@ -1,4 +1,4 @@
-import { UploadMediaFile } from "@/app/lib/fakebook/definitions";
+import { UploadMediaFile } from "../lib/definitions";
 import BaseService, { Response } from "../../../services/base.service";
 import { API_FAKEBOOK_UPLOADFILE } from "../../../services/api-endpoints";
 

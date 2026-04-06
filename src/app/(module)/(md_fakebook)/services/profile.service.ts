@@ -1,6 +1,6 @@
 "use client";
 
-import { Profile } from "@/app/lib/fakebook/definitions";
+import { Profile } from "../lib/definitions";
 import { API_FAKEBOOK_PROFILE_CREATE, API_FAKEBOOK_PROFILE_ME, API_FAKEBOOK_PROFILE_SWITCH, API_FAKEBOOK_PROFILE_UPDATE_AVATAR } from "../../../services/api-endpoints";
 import BaseService, { Response } from "../../../services/base.service";
 

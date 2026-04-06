@@ -1,9 +1,6 @@
 "use client";
 
 import { Comment, ReactionType } from "../../lib/definitions";
-import { commentService } from "@/app/(module)/(fakebook)/services/comment.service";
-import { postService } from "@/app/(module)/(fakebook)/services/post.service";
-import { useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
 import { SimpleDialog } from "@/app/ui/dialogs";
 import { faClose, faEllipsisVertical, faPenToSquare, faThumbsDown, faThumbsUp, faTrash, faUser, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +8,9 @@ import { Button, Skeleton } from "@mui/material";
 import Image from "next/image";
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PostCommentEditor from "./post-comment-editor";
+import { useFakebookStore } from "../../stores/fakebook-store";
+import { postService } from "../../services/post.service";
+import { commentService } from "../../services/comment.service";
 
 type PostCommentOptionsProp = {
   handleEdit: () => void;
@@ -260,7 +260,7 @@ export default function PostItemComments() {
 
   return (
     <SimpleDialog open={!!currentPost} onClose={onClose}>
-      <div className="w-full h-svh sm:w-full md:w-[640px] sm:h-[80vh] flex flex-col p-3 bg-white rounded-md shadow-md outline-1 outline-gray-200">
+      <div className="w-full h-svh sm:w-full md:w-160 sm:h-[80vh] flex flex-col p-3 bg-white rounded-md shadow-md outline-1 outline-gray-200">
         <div className="font-semibold relative flex items-center justify-center">
           <span>Comments</span>
           <FontAwesomeIcon icon={faClose}

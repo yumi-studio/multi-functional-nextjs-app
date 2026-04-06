@@ -1,5 +1,5 @@
-import HeaderNav from "@/app/(module)/(fakebook)/ui/header-nav";
 import { Metadata } from "next";
+import HeaderNav from "../../../ui/header-nav";
 
 export const metadata: Metadata = {
   title: {

@@ -1,6 +1,6 @@
 import {
   Comment, Post, PostMedia, PostStatistic, PostVisibility, ReactionType, UploadMediaFile
-} from "@/app/lib/fakebook/definitions";
+} from "../lib/definitions";
 import BaseService, { Response } from "../../../services/base.service";
 import {
   API_FAKEBOOK_POST_COMMENT, API_FAKEBOOK_POST_COMMENT_CREATE, API_FAKEBOOK_POST_CREATE, API_FAKEBOOK_POST_DELETE, API_FAKEBOOK_POST_DETAIL, API_FAKEBOOK_POST_LIST, API_FAKEBOOK_POST_REACT, API_FAKEBOOK_POST_STATISTIC

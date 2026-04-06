@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import ProtectedRoute from "@/app/ui/protected-route";
-import { FakebookProvider } from "@/app/(module)/(fakebook)/context/FakebookContext";
+import { FakebookProvider } from "../context/FakebookContext";
 
 export const metadata: Metadata = {
   title: {
@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 
 export default async function Layout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: LayoutProps<'/'>) {
   return (
     <div id="fakebook-app"
       className="bg-gray-200 w-full max-w-3xl mx-auto overflow-auto relative select-none z-0">

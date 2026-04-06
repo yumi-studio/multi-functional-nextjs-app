@@ -1,8 +1,6 @@
 "use client";
 
 import { FAKEBOOK_FRIEND_URL, FAKEBOOK_GROUP_URL, FAKEBOOK_NEWSFEED_URL, FAKEBOOK_SEARCH_URL, FAKEBOOK_URL, HOME_URL, SIGNIN_URL, SIGNUP_URL } from "@/app/lib/url_paths";
-import { profileService } from "@/app/(module)/(fakebook)/services/profile.service";
-import { useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { faArrowLeft, faNewspaper, faPlus, faSearch, faUser, faUserPlus, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
@@ -12,6 +10,8 @@ import Image from "next/image";
 import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import { CircleIconButton } from "../../../ui/buttons";
 import { useAppContext } from "@/app/context/AppContext";
+import { useFakebookStore } from "../stores/fakebook-store";
+import { profileService } from "../services/profile.service";
 
 const navItemClass = "flex-auto shrink-0 flex flex-wrap items-end justify-center py-3 text-lg relative border-t-2 border-t-gray-300";
 const navItemActiveClass = "flex-auto shrink-0 flex flex-wrap items-end justify-center py-3 text-lg relative border-t-2 border-t-blue-600 bg-blue-100";

@@ -2,7 +2,7 @@ import { cn } from "@/app/lib/utils";
 import HeaderRight from "../ui/header/HeaderRight";
 import Navigator from "../ui/header/Navigator";
 
-const Layout = async ({ children }: { children: React.ReactNode }) => {
+const Layout = async ({ children }: LayoutProps<'/'>) => {
   return (
     <div className={cn([
       'w-svw h-svh relative z-0 bg-white',

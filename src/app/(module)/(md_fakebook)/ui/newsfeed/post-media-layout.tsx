@@ -1,9 +1,9 @@
 import { HTMLAttributes } from "react";
-import { PostMedia } from "@/app/lib/fakebook/definitions"
 import { faPlay, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 import Image from "next/image";
+import { PostMedia } from "../../lib/definitions";
 
 type LayoutProps = {
   items: PostMedia[];

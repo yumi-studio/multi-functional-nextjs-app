@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
 
 const AboutPage = async () => {
   const locale = await getLocale();
-
+  
   return (
     <div className="pt-16 w-full h-full">
       <div className="p-3 w-full h-auto max-w-4xl mx-auto">

@@ -3,10 +3,6 @@ import { faAdd, faRemove, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const View = () => {
-
-  const popupConfirmRemoveFriend = (id: string) => async () => {
-  }
-  
   return (
     <div>
       {[1, 1, 1, 1, 1, 1].map((profile, index) => (

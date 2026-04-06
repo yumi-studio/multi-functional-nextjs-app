@@ -1,10 +1,9 @@
 "use client";
 
+import { ReactionType } from "../../lib/definitions";
+import { postService } from "../../services/post.service";
+import { useFakebookStore } from "../../stores/fakebook-store";
 import PostItem from "./post-item";
-// import { useTranslations } from "next-intl";
-import { useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
-import { postService } from "@/app/(module)/(fakebook)/services/post.service";
-import { ReactionType } from "@/app/lib/fakebook/definitions";
 import { useEffect } from "react";
 
 export default function Posts() {

@@ -1,10 +1,10 @@
 "use client";
 
-import { Post, ReactionType } from "@/app/lib/fakebook/definitions";
-import { useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
 import { faComment, faThumbsDown, faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useFakebookStore } from "../../stores/fakebook-store";
+import { Post, ReactionType } from "../../lib/definitions";
 
 export type PostItemFooterProps = {
   post: Post;

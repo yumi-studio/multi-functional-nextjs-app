@@ -1,7 +1,6 @@
 "use client";
 
 import { Post, ReactionType } from "../../lib/definitions";
-import { useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
 import { faTrashCan, faPenToSquare, faFlag, faUser, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +11,8 @@ import { useAppContext } from "@/app/context/AppContext";
 import SimpleGalleryViewer, { GalleryItem } from "@/app/ui/simple-gallery-viewer"; 
 import PostMediaLayout from "./post-media-layout";
 import { formatDateTime } from "@/app/lib/utils";
-import { useFakebookContext } from "@/app/(module)/(fakebook)/context/FakebookContext";
+import { useFakebookStore } from "../../stores/fakebook-store";
+import { useFakebookContext } from "../../context/FakebookContext";
 
 export type PostItemProp = {
   post: Post;
@@ -68,8 +68,8 @@ export default function PostItem({ post, changeReaction }: PostItemProp) {
           <FontAwesomeIcon icon={faBars}
             onClick={() => { setShowOptions(!showOptions) }}
             className="cursor-pointer" />
-          <div className={`absolute ${showOptions ? 'block' : 'hidden'} right-0 top-0 bg-white shadow-lg rounded-md pt-1 pb-1 pl-2 pr-2 border border-gray-200 bg-white`}>
-            <ul className="w-[100px]">
+          <div className={`absolute ${showOptions ? 'block' : 'hidden'} right-0 top-0 bg-white shadow-lg rounded-md pt-1 pb-1 pl-2 pr-2 border border-gray-200`}>
+            <ul className="w-25">
               {activeProfile && post.creator.id === activeProfile.id && (
                 <>
                   <li className="cursor-pointer whitespace-nowrap" onClick={() => appContext.alertInDevelop()}>

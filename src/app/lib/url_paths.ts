@@ -14,3 +14,5 @@ export const FAKEBOOK_FRIEND_URL = "/fakebook/friend";
 export const FAKEBOOK_GROUP_URL = "/fakebook/group";
 export const FAKEBOOK_SEARCH_URL = "/fakebook/search";
 export const FAKEBOOK_PROFILE_URL = "/fakebook/profile";
+
+export const FREECHAT_URL = "/freechat";

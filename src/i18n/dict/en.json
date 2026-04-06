@@ -8,6 +8,7 @@
     }
   },
   "home": {
+    "meta_title": "Home",
     "nav_title": "Home",
     "page_title": "Home"
   }

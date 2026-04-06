@@ -1,14 +1,12 @@
 "use client";
 
 import { } from "@/app/lib/url_paths";
-import { FakebookState, useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
-import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { useFakebookStore } from "../../stores/fakebook-store";
 
 export default function PostCreateFake() {
   const t = useTranslations("fakebook.newsfeed");
-  const setNewPostModalOpen = useFakebookStore((state: FakebookState) => state.setNewPostModalOpen);
-  const router = useRouter();
+  const setNewPostModalOpen = useFakebookStore((state) => state.setNewPostModalOpen);
 
   return (
     <div className="mb-3 w-full p-3 rounded-lg bg-white shadow-sm">

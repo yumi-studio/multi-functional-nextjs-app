@@ -1,17 +1,17 @@
 "use client";
 
-import { getActiveProfileId } from "@/app/(module)/(fakebook)/lib/actions";
 import { FAKEBOOK_URL } from "@/app/lib/url_paths";
-import { postService } from "@/app/(module)/(fakebook)/services/post.service";
-import { profileService } from "@/app/(module)/(fakebook)/services/profile.service";
-import { useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
-import PostCreate from "@/app/(module)/(fakebook)/ui/newsfeed/post-create";
-import PostItemComments from "@/app/(module)/(fakebook)/ui/newsfeed/post-item-comments";
-import Posts from "@/app/(module)/(fakebook)/ui/newsfeed/posts";
 
-import { PostsSekeleton } from "@/app/(module)/(fakebook)/ui/skeletons";
 import { useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
+import { useFakebookStore } from "../../../../stores/fakebook-store";
+import { postService } from "../../../../services/post.service";
+import { getActiveProfileId } from "../../../../lib/actions";
+import { profileService } from "../../../../services/profile.service";
+import Posts from "../../../../ui/newsfeed/posts";
+import { PostsSekeleton } from "../../../../ui/skeletons";
+import PostItemComments from "../../../../ui/newsfeed/post-item-comments";
+import PostCreate from "../../../../ui/newsfeed/post-create";
 
 export default function View() {
   const [loading, setLoading] = useState(true);

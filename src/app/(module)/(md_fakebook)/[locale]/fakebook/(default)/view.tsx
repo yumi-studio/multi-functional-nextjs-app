@@ -1,14 +1,14 @@
 "use client";
 
-import { Profile } from "../../../lib/definitions";
 import { FAKEBOOK_NEWSFEED_URL } from "@/app/lib/url_paths";
-import { profileService } from "@/app/(module)/(fakebook)/services/profile.service";
-import { useFakebookStore } from "@/app/(module)/(fakebook)/stores/fakebook-store";
 import { useRouter } from "@/i18n/navigation";
 import { faArrowRight, faRotateBack } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
+import { Profile } from "../../../lib/definitions";
+import { useFakebookStore } from "../../../stores/fakebook-store";
+import { profileService } from "../../../services/profile.service";
 
 export default function View() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
