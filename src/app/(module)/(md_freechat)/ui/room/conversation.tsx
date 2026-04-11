@@ -1,14 +1,16 @@
-import { cn } from "@/app/lib/utils";
-import { faImage, faVideo, faMicrophone, faFileAlt, faSmile, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { TextareaAutosize } from "@mui/material";
-import { EditorIconButton } from "../../../ui/buttons";
-import MessageList from "../../../ui/message-list";
+"use client"
 
-const RoomPage = async ({ }: PageProps<'/[locale]/freechat/room'>) => {
+import { TextareaAutosize } from "@mui/material";
+import { EditorIconButton } from "../buttons";
+import { cn } from "@/app/lib/utils";
+import { faChevronRight, faFileAlt, faImage, faMicrophone, faSmile, faVideo } from "@fortawesome/free-solid-svg-icons";
+import MessageList from "../message-list";
+
+const Conversation = ({ id }: { id: string }) => {
   return (
     <div className="w-full h-full max-w-7xl mx-auto bg-inherit border-x-2 border-(--fc-border) relative flex flex-col">
       {/* Message stream */}
-      <MessageList />
+      <MessageList id={id} />
 
       {/* Message editor */}
       <div className="shrink-0 grow-0 relative z-10 w-full p-3 bg-inherit">
@@ -59,4 +61,4 @@ const RoomPage = async ({ }: PageProps<'/[locale]/freechat/room'>) => {
   )
 }
 
-export default RoomPage;
+export default Conversation;

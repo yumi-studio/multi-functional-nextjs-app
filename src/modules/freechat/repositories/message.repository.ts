@@ -1,7 +1,5 @@
-"use server";
-
+import 'server-only';
 import { and, count, desc, eq, isNull } from "drizzle-orm";
-
 import { db } from "../db";
 import { InsertMessage, messagesTable, SelectMessage } from "../db/schema";
 

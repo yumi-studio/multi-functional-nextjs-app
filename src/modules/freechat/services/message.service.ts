@@ -3,7 +3,7 @@
 import * as messageRepository from "../repositories/message.repository";
 import * as participantRepository from "../repositories/participant.repository";
 import * as conversationRepository from "../repositories/conversation.repository";
-import type { Message } from "../types";
+import { SelectMessage } from "../db/schema";
 
 export const createMessage = async ({
   conversationId,
@@ -17,7 +17,7 @@ export const createMessage = async ({
   content: string;
   type?: string;
   replyMessageId?: string | null;
-}): Promise<Message | null> => {
+}): Promise<SelectMessage | null> => {
   const normalizedConversationId = conversationId.trim();
   const normalizedUserId = userId.trim();
   const normalizedContent = content.trim();
@@ -63,7 +63,7 @@ export const editMessage = async ({
 }: {
   messageId: string;
   content: string;
-}): Promise<Message | null> => {
+}): Promise<SelectMessage | null> => {
   const normalizedMessageId = messageId.trim();
   const normalizedContent = content.trim();
 
@@ -88,7 +88,7 @@ export const deleteMessage = async ({
 }: {
   messageId: string;
   softDelete?: boolean;
-}): Promise<Message | null> => {
+}): Promise<SelectMessage | null> => {
   const normalizedMessageId = messageId.trim();
 
   if (!normalizedMessageId) {

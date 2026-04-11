@@ -3,8 +3,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { db } from "../db";
-import { participantsTable } from "../db/schema";
-import type { Participant } from "../types";
+import { participantsTable, SelectParticipant } from "../db/schema";
 import * as participantRepository from "../repositories/participant.repository";
 
 export const changeParticipantNickname = async ({
@@ -13,7 +12,7 @@ export const changeParticipantNickname = async ({
 }: {
   participantId: string;
   nickname: string | null;
-}): Promise<Participant | null> => {
+}): Promise<SelectParticipant | null> => {
   const normalizedParticipantId = participantId.trim();
 
   if (!normalizedParticipantId) {
@@ -33,7 +32,7 @@ export const changeParticipantNicknameByConversation = async ({
   conversationId: string;
   userId: string;
   nickname: string | null;
-}): Promise<Participant | null> => {
+}): Promise<SelectParticipant | null> => {
   const participant = await participantRepository.getByConversationIdAndUserId(
     conversationId.trim(),
     userId.trim()
@@ -54,7 +53,7 @@ export const leaveConversation = async ({
 }: {
   conversationId: string;
   userId: string;
-}): Promise<Participant | null> => {
+}): Promise<SelectParticipant | null> => {
   const normalizedConversationId = conversationId.trim();
   const normalizedUserId = userId.trim();
 

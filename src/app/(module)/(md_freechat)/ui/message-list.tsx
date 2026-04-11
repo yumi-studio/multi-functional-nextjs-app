@@ -8,6 +8,8 @@ import { getMessages } from "../lib/actions";
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 
+const CONVERSATION_ID = "00000000-0000-0000-0000-000000000000";
+
 const MessageListSkeleton = () => {
   return (
     <>
@@ -31,7 +33,7 @@ const MessageListSkeleton = () => {
   )
 }
 
-const MessageList = () => {
+const MessageList = ({ id }: { id: string }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);

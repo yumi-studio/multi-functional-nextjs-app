@@ -3,8 +3,7 @@
 import { and, eq, inArray } from "drizzle-orm";
 
 import { db } from "../db";
-import { conversationsTable, participantsTable } from "../db/schema";
-import type { Conversation, Message, Participant } from "../types";
+import { conversationsTable, participantsTable, SelectConversation, SelectMessage, SelectParticipant } from "../db/schema";
 import * as conversationRepository from "../repositories/conversation.repository";
 import * as messageService from "./message.service";
 
@@ -20,7 +19,7 @@ export const createConversation = async ({
   name: string;
   avatarUrl?: string | null;
   participantUserIds: string[];
-}): Promise<{ conversation: Conversation; participants: Participant[] } | null> => {
+}): Promise<{ conversation: SelectConversation; participants: SelectParticipant[] } | null> => {
   const normalizedName = name.trim();
   const normalizedUserIds = normalizeUserIds(participantUserIds);
 
@@ -64,7 +63,7 @@ export const addUsersToConversation = async ({
   conversationId: string;
   userIds: string[];
   role?: string;
-}): Promise<Participant[]> => {
+}): Promise<SelectParticipant[]> => {
   const normalizedConversationId = conversationId.trim();
   const normalizedUserIds = normalizeUserIds(userIds);
 
@@ -81,7 +80,7 @@ export const addUsersToConversation = async ({
         .limit(1);
 
       if (!conversation) {
-        return [] as Participant[];
+        return [];
       }
 
       const existingParticipants = await tx
@@ -98,7 +97,7 @@ export const addUsersToConversation = async ({
       const missingUserIds = normalizedUserIds.filter((userId) => !existingUserIds.has(userId));
 
       if (missingUserIds.length === 0) {
-        return [] as Participant[];
+        return [];
       }
 
       return await tx
@@ -123,7 +122,7 @@ export const removeUsersFromConversation = async ({
 }: {
   conversationId: string;
   userIds: string[];
-}): Promise<Participant[]> => {
+}): Promise<SelectParticipant[]> => {
   const normalizedConversationId = conversationId.trim();
   const normalizedUserIds = normalizeUserIds(userIds);
 
@@ -158,7 +157,7 @@ export const saveNewMessage = async ({
   content: string;
   type?: string;
   replyMessageId?: string | null;
-}): Promise<Message | null> => {
+}): Promise<SelectMessage | null> => {
   return messageService.createMessage({
     conversationId,
     userId,
@@ -176,7 +175,7 @@ export const fetchConversationById = async (conversationId: string) => {
   return await conversationRepository.getById(conversationId);
 };
 
-export const deleteConversation = async (conversationId: string): Promise<Conversation | null> => {
+export const deleteConversation = async (conversationId: string): Promise<SelectConversation | null> => {
   const normalizedConversationId = conversationId.trim();
 
   if (!normalizedConversationId) {

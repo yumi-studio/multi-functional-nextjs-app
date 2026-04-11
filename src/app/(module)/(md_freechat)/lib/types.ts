@@ -1,4 +1,4 @@
-import { SelectConversation, SelectMessage, SelectParticipant, SelectUser } from "./db/schema";
+import { SelectConversation, SelectMessage, SelectParticipant, SelectUser } from "@/modules/freechat/db/schema";
 
 export type User = Omit<SelectUser, 'passwordHash'>
 

@@ -1,12 +1,18 @@
 "use client";
 
+import { useActionState, useEffect, useState } from "react";
+import { Checkbox } from "@mui/material";
+import { login } from "../../../actions";
+
 type InputProps = {
   label: string;
   id: string;
+  name: string;
   type: string;
   placeholder: string;
+  onChange?: (value: string) => void;
 };
-const Input = ({ label, id, type, placeholder }: InputProps) => {
+const Input = ({ label, id, name, type, placeholder, onChange }: InputProps) => {
   return (
     <div className="border-b-2 border-b-(--fc-border)">
       <label className="font-semibold" htmlFor={id}>
@@ -16,8 +22,9 @@ const Input = ({ label, id, type, placeholder }: InputProps) => {
         className="block w-full outline-0 py-1"
         id={id}
         type={type}
-        name={id}
+        name={name}
         placeholder={placeholder}
+        onChange={(e) => onChange && onChange(e.target.value)}
       />
     </div>
   );
@@ -25,6 +32,9 @@ const Input = ({ label, id, type, placeholder }: InputProps) => {
 
 
 const View = () => {
+  const [isNew, setIsNew] = useState(false);
+  const [state, action, pending] = useActionState(login, undefined)
+
   return (
     <>
       {/* Page wrapper */}
@@ -34,18 +44,39 @@ const View = () => {
             <h2 className="text-2xl font-bold text-center mb-1">Welcome to Freechat!</h2>
             <p className="text-center text-(--fc-text-secondary)">Login to join free conversations!</p>
           </div>
-          <div className="mb-2">
-            <Input label="Email" id="form-email" type="email" placeholder="Enter email" />
-          </div>
-          <div className="mb-2">
-            <Input label="Display Name" id="form-name" type="text" placeholder="Enter display name" />
-          </div>
-          <div className="mb-2">
-            <Input label="Password" id="form-password" type="password" placeholder="Enter password" />
-          </div>
-          <div className="text-center mt-2">
-            <button type="button" className="px-3 py-2 w-20 border-2 rounded-md uppercase font-semibold">Login</button>
-          </div>
+          <form action={action}>
+            <div className="mb-2 flex items-center gap-2">
+              <Checkbox id="form-new-account" size="small" sx={{
+                color: 'white',
+                padding: 0,
+                '&.Mui-checked': {
+                  color: 'white'
+                }
+              }} onChange={(e) => setIsNew(e.target.checked)} />
+              <input hidden type="number" name="isNewAccount" value={isNew ? 1 : 0} />
+              <label htmlFor="form-new-account">New account</label>
+            </div>
+            <div className="mb-2">
+              <Input label="Email" id="form-email" name="email" type="email" placeholder="Enter email" />
+              {state?.errors?.email && <p>{state.errors.email}</p>}
+            </div>
+            {isNew && (
+              <div className="mb-2">
+                <Input label="Display Name" id="form-display-name" name="displayName" type="text" placeholder="Enter display name" />
+                {state?.errors?.displayName && <p>{state.errors.displayName}</p>}
+              </div>
+            )}
+            <div className="mb-2">
+              <Input label="Password" id="form-password" name="password" type="password" placeholder="Enter password" />
+              {state?.errors?.password && <p>{state.errors.password}</p>}
+            </div>
+            <div className="text-center mt-2">
+              <button type="submit" className="px-3 py-2 w-20 border-2 rounded-md uppercase font-semibold"
+                disabled={pending}>
+                {pending ? 'Logging in...' : 'Login'}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </>

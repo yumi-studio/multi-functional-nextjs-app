@@ -1,9 +1,9 @@
-"use server";
-
-import { count, desc, eq } from "drizzle-orm";
+import 'server-only';
+import { count, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { db } from "../db";
-import { conversationsTable, InsertConversation, SelectConversation } from "../db/schema";
+import { conversationsTable, InsertConversation, participantsTable, SelectConversation } from "../db/schema";
+import { PgSelectBuilder, PgSelectQueryBuilderBase, SelectedFields } from 'drizzle-orm/pg-core';
 
 type ConversationIdOnly = Pick<SelectConversation, "id">;
 type UpdateConversation = Partial<Omit<InsertConversation, "id" | "createdAt">>;
@@ -29,9 +29,36 @@ export const getAll = async () => {
   try {
     return await db.select().from(conversationsTable).orderBy(desc(conversationsTable.createdAt));
   } catch {
-    return [] as SelectConversation[];
+    return [];
   }
 };
+
+export const getAllByUser = async (userId: string) => {
+  try {
+    const query = db.select()
+      .from(conversationsTable)
+      .where(
+        inArray(
+          conversationsTable.id,
+          sql`(select conversation_id from ${participantsTable} where ${participantsTable.userId} = ${userId})`
+        )
+      )
+      .orderBy(desc(conversationsTable.createdAt));
+
+    console.log(`[INFO] Query: ${query.$dynamic().toSQL().sql}`);
+
+    return await query.execute();
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
+// export const getByPagination = (filters: { field: string, value: any }[] = [], page = 1, limit = 20) => {
+//   let query = db.select().from(conversationsTable).$dynamic;
+//   filters.map(filter => query.w)
+//   return
+// }
 
 export const getCount = async () => {
   try {

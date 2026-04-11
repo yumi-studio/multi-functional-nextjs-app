@@ -1,7 +1,5 @@
-"use server";
-
+import 'server-only';
 import { and, count, desc, eq } from "drizzle-orm";
-
 import { db } from "../db";
 import { InsertParticipant, participantsTable, SelectParticipant } from "../db/schema";
 
