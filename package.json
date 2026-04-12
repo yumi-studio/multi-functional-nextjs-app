@@ -25,6 +25,7 @@
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.1",
     "drizzle-orm": "^0.45.2",
+    "drizzle-seed": "^0.3.1",
     "framer-motion": "^12.34.3",
     "gapi-script": "^1.2.0",
     "idb": "^8.0.3",
