@@ -3,20 +3,24 @@
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import Link from "next/link";
-import { useAuth } from "../../context/auth.context";
-import { FREECHAT_LOGIN_URL, FREECHAT_ROOM_URL } from "../../lib/url";
-import { getJoinedConversations, logout } from "../../actions";
-import { Conversation } from "../../lib/types";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight, faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+
+import { useAuth } from "../../context/auth.context";
+import { FREECHAT_LOGIN_URL, FREECHAT_ROOM_URL } from "../../lib/url";
+import { logout } from "../../actions";
+import { Conversation } from "../../lib/types";
+import { getJoinedConversations } from "../../actions/conversations";
 
 const View = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const { user } = useAuth();
 
   useEffect(() => {
-    getJoinedConversations().then(data => setConversations(data)).catch(err => toast.error(err.message));
+    getJoinedConversations()
+      .then(data => setConversations(data))
+      .catch(err => toast.error(err.message));
   }, []);
 
   return (

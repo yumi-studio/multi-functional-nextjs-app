@@ -1,15 +1,15 @@
 "use server"
 
+import bcrypt from 'bcrypt';
+import { redirect } from "next/navigation";
+import { cache } from "react";
+import z from "zod";
+
 import { FREECHAT_URL } from "@/app/lib/url_paths";
 import * as authService from "@/modules/freechat/services/auth.service";
 import * as userService from "@/modules/freechat/services/user.service";
 import * as conversationService from "@/modules/freechat/services/conversation.service";
 import * as userRepository from "@/modules/freechat/repositories/user.repository";
-import * as conversationRepository from "@/modules/freechat/repositories/conversation.repository";
-import bcrypt from 'bcrypt';
-import { redirect } from "next/navigation";
-import { cache } from "react";
-import z from "zod";
 import { verifySession } from "../lib/dal";
 import AuthenticatedError from "@/modules/freechat/errors/unauthenticated.error";
 
@@ -120,16 +120,3 @@ export const verifyAuthUser = cache(
     return user ?? null;
   }
 )
-
-export const getJoinedConversations = async () => {
-  const user = await verifyAuthUser();
-  const userId = user?.id;
-  if (!userId) {
-    return [];
-  }
-
-  console.log(`[INFO] User ${userId} is fetching conversations`);
-  const list = await conversationRepository.getAllByUser(userId);
-  console.log(`[INFO] User ${userId} done fetching conversations`, list);
-  return list;
-}

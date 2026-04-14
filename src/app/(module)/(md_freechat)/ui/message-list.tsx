@@ -1,14 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useVirtualizer } from '@tanstack/react-virtual'
 import MessageItem from "./message-item";
-import { Message } from "../lib/types";
-import { getMessages } from "../lib/actions";
-import { Button } from "@mui/material";
 import { toast } from "react-toastify";
-
-const CONVERSATION_ID = "00000000-0000-0000-0000-000000000000";
+import { useConversationStore } from "../stores/conversation-store";
+import { getMessages } from "../actions/conversations";
+import { debounce } from "lodash";
+import { Button } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDoubleDown, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const MessageListSkeleton = () => {
   return (
@@ -34,10 +35,14 @@ const MessageListSkeleton = () => {
 }
 
 const MessageList = ({ id }: { id: string }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const messages = useConversationStore(state => state.messages);
+  const addMessages = useConversationStore(state => state.addMessages);
+  const setMessages = useConversationStore(state => state.setMessages);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [isOnLatest, setIsOnLatest] = useState(true);
   const parentRef = useRef<HTMLDivElement | null>(null);
+  const anchorRef = useRef<string | null>(null);
   const itemsSizeRef = useRef({
     prev: 0,
     current: 0
@@ -48,29 +53,43 @@ const MessageList = ({ id }: { id: string }) => {
   const rowVirtualizer = useVirtualizer({
     count: reversedMessages.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 100, // fallback height
-    overscan: 10
+    estimateSize: () => 100, // fallback item height
+    overscan: 10,
+    measureElement: (el) => el.getBoundingClientRect().height,
   });
 
-  const loadMore = async () => {
+  const loadMore = debounce(async () => {
     const el = parentRef.current;
     if (!el || isLoading || !hasMore) return;
 
     setIsLoading(true);
-    const older = await getMessages();
+    // Use older message as anchor to load more older messages
+    const older = await getMessages(id, anchorRef.current);
+    const anchorMessage = older.length > 0 ? older[older.length - 1] : null;
+    console.log('[DEBUG] Load older messages', older);
+    console.log('[DEBUG] Anchor message', anchorMessage);
+    if (anchorMessage) {
+      anchorRef.current = anchorMessage.id;
+    }
     if (older.length === 0) {
       setHasMore(false);
     } else {
       itemsSizeRef.current.prev = messages.length;
       itemsSizeRef.current.current = messages.length + older.length;
-      setMessages((prev) => [...prev, ...older]);
+      addMessages(older, 'older');
     }
     setIsLoading(false);
-  };
+  }, 200);
 
   const handleScroll = () => {
     const el = parentRef.current;
     if (!el) return;
+
+    if ((el.scrollHeight - el.scrollTop) > 1000) {
+      setIsOnLatest(false);
+    } else {
+      setIsOnLatest(true);
+    }
 
     if (el.scrollTop === 0 && !isLoading) {
       loadMore();
@@ -78,16 +97,8 @@ const MessageList = ({ id }: { id: string }) => {
   };
 
   useEffect(() => {
-    const getMessagesTimer = setTimeout(async () => {
-      try {
-        loadMore();
-      } catch {
-        toast.error("Load failed");
-      }
-    }, 100);
-
-    return () => {
-      clearTimeout(getMessagesTimer);
+    if (loadMore) {
+      loadMore();
     }
   }, []);
 
@@ -105,7 +116,7 @@ const MessageList = ({ id }: { id: string }) => {
 
   return (
     <>
-      <div className="flex-auto w-full relative z-0 overflow-auto has-scrollbar scroll-m-4"
+      <div className="flex-auto w-full relative z-0 overflow-auto has-scrollbar"
         ref={parentRef}
         onScroll={handleScroll}
       >
@@ -124,15 +135,40 @@ const MessageList = ({ id }: { id: string }) => {
             const message = reversedMessages[virtualRow.index];
 
             return (
-              <MessageItem
+              <div
                 key={message.id}
-                data={message}
-                virtualRow={virtualRow}
-                measure={rowVirtualizer.measureElement}
-              />
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  transform: `translateY(${virtualRow.start}px)`,
+                }}
+                data-index={virtualRow.index}
+                data-id={message.id}
+                ref={rowVirtualizer.measureElement}
+              >
+                <MessageItem
+                  data={message}
+                  virtualRow={virtualRow}
+                  measure={rowVirtualizer.measureElement}
+                />
+              </div>
             )
           })}
         </div>
+
+        {!isOnLatest && (
+          <div className="sticky w-full bottom-0 left-0 right-0 z-10 text-center">
+            <Button type="button" size="medium" disableRipple color="primary" variant="contained"
+              sx={{
+                borderRadius: '9999px',
+              }}
+              onClick={() => { rowVirtualizer.scrollToIndex(messages.length - 1, { behavior: 'instant' }) }}>
+              <FontAwesomeIcon icon={faAngleDoubleDown} width={'1rem'} height={'1rem'} fontSize={'1rem'} />
+            </Button>
+          </div>
+        )}
       </div>
     </>
   )

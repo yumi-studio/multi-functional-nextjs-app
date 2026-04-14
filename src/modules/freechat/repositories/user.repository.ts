@@ -1,5 +1,5 @@
 import 'server-only';
-import { count, desc, eq } from "drizzle-orm";
+import { count, desc, eq, inArray } from "drizzle-orm";
 import { db } from "../db";
 import { InsertUser, SelectUser, usersTable } from "../db/schema";
 
@@ -46,6 +46,15 @@ export const getById = async (id: string) => {
     return user ?? null;
   } catch {
     return null;
+  }
+};
+
+export const getManyById = async (ids: string[]) => {
+  try {
+    const users = await db.select().from(usersTable).where(inArray(usersTable.id, ids)).execute();
+    return users ?? [];
+  } catch {
+    return [];
   }
 };
 

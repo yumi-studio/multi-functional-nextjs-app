@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { Bounce, toast } from "react-toastify";
 import { twMerge } from "tailwind-merge";
+import { keyBy, mapValues, omit } from "lodash";
 
 /**
  * 1: 24-12-2026 13:30
@@ -49,4 +50,19 @@ export function cnMedia(input: ClassValue, mediaQuery: string) {
 
 export function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function mapByAndOmit<
+  T extends Record<string, any>,
+  K extends keyof T,
+  O extends keyof T
+>(
+  arr: T[],
+  keyField: K,
+  omitField: O
+): Record<T[K] & PropertyKey, Omit<T, O>> {
+  return mapValues(
+    keyBy(arr, keyField as string),
+    (item) => omit(item, omitField)
+  ) as unknown as Record<T[K] & PropertyKey, Omit<T, O>>;
 }

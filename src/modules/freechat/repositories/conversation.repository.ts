@@ -45,7 +45,7 @@ export const getAllByUser = async (userId: string) => {
       )
       .orderBy(desc(conversationsTable.createdAt));
 
-    console.log(`[INFO] Query: ${query.$dynamic().toSQL().sql}`);
+    // console.log(`[INFO] Query: ${query.$dynamic().toSQL().sql}`);
 
     return await query.execute();
   } catch (err) {

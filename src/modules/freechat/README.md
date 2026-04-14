@@ -9,6 +9,9 @@ npx drizzle-kit generate --config="./src/modules/freechat/drizzle.config.ts"
 
 # Push migrations to postgres service
 npx drizzle-kit push --config="./src/modules/freechat/drizzle.config.ts"
+
+# Seeding
+npx tsx ./src/modules/freechat/db/seeds/index.ts
 ```
 
 ### Install Postgres via docker

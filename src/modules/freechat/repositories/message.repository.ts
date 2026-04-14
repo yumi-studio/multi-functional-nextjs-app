@@ -1,7 +1,7 @@
 import 'server-only';
-import { and, count, desc, eq, isNull } from "drizzle-orm";
+import { and, asc, count, desc, eq, isNull, lt, sql } from "drizzle-orm";
 import { db } from "../db";
-import { InsertMessage, messagesTable, SelectMessage } from "../db/schema";
+import { InsertMessage, messagesTable, SelectMessage, usersTable } from "../db/schema";
 
 type MessageIdOnly = Pick<SelectMessage, "id">;
 type UpdateMessage = Partial<Omit<InsertMessage, "id" | "createdAt">>;
@@ -30,6 +30,7 @@ export const getAll = async () => {
     return [] as SelectMessage[];
   }
 };
+
 
 export const getCount = async () => {
   try {
@@ -60,6 +61,42 @@ export const getByConversationId = async (conversationId: string) => {
     return [] as SelectMessage[];
   }
 };
+
+export const getByConversationIdWithAnchor = async ({
+  conversationId,
+  anchorMessageId = null,
+  limit = 0,
+  filters = {}
+}: {
+  conversationId: string;
+  anchorMessageId?: string | null;
+  limit?: number;
+  filters?: object
+}) => {
+  const query = db.select().from(messagesTable);
+  const where = [];
+  let anchorCreatedAt = new Date();
+  if (anchorMessageId) {
+    const anchorMessage = await getById(anchorMessageId);
+    if (anchorMessage) {
+      anchorCreatedAt = anchorMessage.createdAt;
+    }
+  }
+  where.push(lt(messagesTable.createdAt, anchorCreatedAt));
+  where.push(eq(messagesTable.conversationId, conversationId));
+  query.$dynamic().where(and(...where));
+
+  if (limit >= 1) {
+    query.$dynamic().limit(limit);
+  } else {
+    query.$dynamic().limit(0);
+  }
+  query.$dynamic().orderBy(desc(messagesTable.createdAt));
+
+  console.log('[QUERY]', query.$dynamic().toSQL());
+  const result = await query.execute();
+  return result;
+}
 
 export const getActiveByConversationId = async (conversationId: string) => {
   try {

@@ -3,6 +3,9 @@
 import { useActionState, useEffect, useState } from "react";
 import { Checkbox } from "@mui/material";
 import { login } from "../../../actions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { cn } from "@/app/lib/utils";
 
 type InputProps = {
   label: string;
@@ -13,19 +16,32 @@ type InputProps = {
   onChange?: (value: string) => void;
 };
 const Input = ({ label, id, name, type, placeholder, onChange }: InputProps) => {
+  const [inputType, setInputType] = useState(type ?? 'text');
+
   return (
     <div className="border-b-2 border-b-(--fc-border)">
       <label className="font-semibold" htmlFor={id}>
         {label}
       </label>
-      <input
-        className="block w-full outline-0 py-1"
-        id={id}
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        onChange={(e) => onChange && onChange(e.target.value)}
-      />
+      <div className="relative z-0">
+        <input
+          className={cn([
+            'block w-full outline-0 py-1',
+            type === 'password' && 'pr-6'
+          ])}
+          id={id}
+          type={inputType}
+          name={name}
+          placeholder={placeholder}
+          onChange={(e) => onChange && onChange(e.target.value)}
+        />
+        {type === 'password' && (
+          <div className="absolute top-1/2 right-0 transform -translate-y-1/2">
+            <FontAwesomeIcon icon={inputType === 'password' ? faEyeSlash : faEye} width={24} height={24} size="1x"
+              onClick={() => setInputType(inputType === 'text' ? 'password' : 'text')} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -53,7 +69,7 @@ const View = () => {
                   color: 'white'
                 }
               }} onChange={(e) => setIsNew(e.target.checked)} />
-              <input hidden type="number" name="isNewAccount" value={isNew ? 1 : 0} />
+              <input hidden type="number" name="isNewAccount" defaultValue={isNew ? 1 : 0} />
               <label htmlFor="form-new-account">New account</label>
             </div>
             <div className="mb-2">

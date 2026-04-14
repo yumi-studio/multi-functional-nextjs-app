@@ -4,6 +4,6 @@ export type User = Omit<SelectUser, 'passwordHash'>
 
 export type Conversation = SelectConversation;
 
-export type Participant = SelectParticipant;
+export type Participant = SelectParticipant & { user: User | null }
 
 export type Message = SelectMessage;
