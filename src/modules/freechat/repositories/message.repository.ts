@@ -1,7 +1,7 @@
 import 'server-only';
 import { and, asc, count, desc, eq, isNull, lt, sql } from "drizzle-orm";
-import { db } from "../db";
-import { InsertMessage, messagesTable, SelectMessage, usersTable } from "../db/schema";
+import { db } from "@/modules/freechat/db";
+import { InsertMessage, messagesTable, SelectMessage, usersTable } from "@/modules/freechat/db/schema";
 
 type MessageIdOnly = Pick<SelectMessage, "id">;
 type UpdateMessage = Partial<Omit<InsertMessage, "id" | "createdAt">>;

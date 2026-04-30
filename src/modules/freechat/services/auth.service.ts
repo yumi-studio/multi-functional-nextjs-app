@@ -1,27 +1,21 @@
 import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers';
-
-const secretKey = process.env.FREECHAT_SESSION_SECRET;
-const encodedKey = new TextEncoder().encode(secretKey);
-export const JWT_COOKIE_KEY = 'freechat_token';
-
-type JwtPayload = {
-  userId: string,
-  expiresAt: Date,
-}
+import { cache } from 'react';
+import { JwtPayload } from '@/modules/freechat/shared/types';
+import { ENCODED_SESSION_SECRET, JWT_COOKIE_KEY } from '@/modules/freechat/shared/constants';
 
 export async function encrypt(payload: JwtPayload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(encodedKey)
+    .sign(ENCODED_SESSION_SECRET)
 }
 
 export async function decrypt(jwtToken: string | undefined = '') {
   try {
-    const { payload } = await jwtVerify(jwtToken, encodedKey, {
+    const { payload } = await jwtVerify(jwtToken, ENCODED_SESSION_SECRET, {
       algorithms: ['HS256'],
     })
     return payload;
@@ -48,3 +42,15 @@ export async function deleteJwt() {
   const cookieStore = await cookies();
   cookieStore.delete(JWT_COOKIE_KEY);
 }
+
+export const verifySession = cache(async () => {
+  const cookie = (await cookies()).get(JWT_COOKIE_KEY)?.value
+  const session = await decrypt(cookie)
+
+  if (!session?.userId) {
+    // redirect(FREECHAT_LOGIN_URL);
+    return { isAuth: false, userId: null }
+  }
+
+  return { isAuth: true, userId: session.userId }
+})

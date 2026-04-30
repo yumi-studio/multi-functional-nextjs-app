@@ -1,6 +1,6 @@
 "use client";
 
-import { UploadMediaFile } from "../../lib/definitions";
+import { UploadMediaFile } from "@/app/(module)/(md_fakebook)/lib/definitions";
 import { SimpleDialog } from "@/app/ui/dialogs";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
 import { faClose, faTrash, faVideo } from "@fortawesome/free-solid-svg-icons";
@@ -10,9 +10,9 @@ import Image from "next/image";
 import { useState } from "react";
 import SimpleGalleryViewer, { GalleryItem } from "@/app/ui/simple-gallery-viewer";
 import { useAppContext } from "@/app/context/AppContext";
-import { useFakebookStore } from "../../stores/fakebook-store";
-import { uploadService } from "../../services/upload.servie";
-import { postService } from "../../services/post.service";
+import { useFakebookStore } from "@/app/(module)/(md_fakebook)/stores/fakebook-store";
+import { uploadService } from "@/app/(module)/(md_fakebook)/services/upload.servie";
+import { postService } from "@/app/(module)/(md_fakebook)/services/post.service";
 
 export default function PostCreate() {
   const t = useTranslations("fakebook.newsfeed");

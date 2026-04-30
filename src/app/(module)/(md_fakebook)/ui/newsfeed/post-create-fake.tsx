@@ -2,7 +2,7 @@
 
 import { } from "@/app/lib/url_paths";
 import { useTranslations } from "next-intl";
-import { useFakebookStore } from "../../stores/fakebook-store";
+import { useFakebookStore } from "@/app/(module)/(md_fakebook)/stores/fakebook-store";
 
 export default function PostCreateFake() {
   const t = useTranslations("fakebook.newsfeed");

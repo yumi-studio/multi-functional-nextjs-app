@@ -1,7 +1,8 @@
 import 'server-only';
 import { and, count, desc, eq } from "drizzle-orm";
-import { db } from "../db";
-import { InsertParticipant, participantsTable, SelectParticipant } from "../db/schema";
+import { db } from "@/modules/freechat/db";
+import { InsertParticipant, participantsTable, SelectParticipant } from "@/modules/freechat/db/schema";
+import { cache } from 'react';
 
 type ParticipantIdOnly = Pick<SelectParticipant, "id">;
 type UpdateParticipant = Partial<Omit<InsertParticipant, "id" | "createdAt">>;
@@ -54,19 +55,31 @@ export const getById = async (id: string) => {
   }
 };
 
-export const getByConversationId = async (conversationId: string) => {
+export const getByConversationId = async (conversationId: string): Promise<SelectParticipant[]> => {
   try {
     return await db
       .select()
       .from(participantsTable)
       .where(eq(participantsTable.conversationId, conversationId))
-      .orderBy(desc(participantsTable.joinedAt));
+      .orderBy(desc(participantsTable.joinedAt))
   } catch {
-    return [] as SelectParticipant[];
+    return [];
   }
-};
+}
 
-export const getByUserId = async (userId: string) => {
+export const getUserIdsByConversationId = async (conversationId: string): Promise<string[]> => {
+  try {
+    const participants = await db
+      .select()
+      .from(participantsTable)
+      .where(eq(participantsTable.conversationId, conversationId));
+    return participants.map(p => p.userId);
+  } catch {
+    return [];
+  }
+}
+
+export const getByUserId = async (userId: string): Promise<SelectParticipant[]> => {
   try {
     return await db
       .select()
@@ -74,11 +87,11 @@ export const getByUserId = async (userId: string) => {
       .where(eq(participantsTable.userId, userId))
       .orderBy(desc(participantsTable.joinedAt));
   } catch {
-    return [] as SelectParticipant[];
+    return [];
   }
 };
 
-export const getByConversationIdAndUserId = async (conversationId: string, userId: string) => {
+export const getByConversationIdAndUserId = async (conversationId: string, userId: string): Promise<SelectParticipant | null> => {
   try {
     const [participant] = await db
       .select()
@@ -92,15 +105,15 @@ export const getByConversationIdAndUserId = async (conversationId: string, userI
   }
 };
 
-export const existsById = async (id: string) => {
+export const existsById = async (id: string): Promise<boolean> => {
   return (await getById(id)) !== null;
 };
 
-export const existsByConversationIdAndUserId = async (conversationId: string, userId: string) => {
+export const existsByConversationIdAndUserId = async (conversationId: string, userId: string): Promise<boolean> => {
   return (await getByConversationIdAndUserId(conversationId, userId)) !== null;
 };
 
-export const updateById = async (id: string, data: UpdateParticipant) => {
+export const updateById = async (id: string, data: UpdateParticipant): Promise<SelectParticipant | null> => {
   if (Object.keys(data).length === 0) {
     return null;
   }
@@ -118,7 +131,7 @@ export const updateById = async (id: string, data: UpdateParticipant) => {
   }
 };
 
-export const deleteById = async (id: string) => {
+export const deleteById = async (id: string): Promise<SelectParticipant | null> => {
   try {
     const [participant] = await db
       .delete(participantsTable)
@@ -131,13 +144,13 @@ export const deleteById = async (id: string) => {
   }
 };
 
-export const deleteByConversationId = async (conversationId: string) => {
+export const deleteByConversationId = async (conversationId: string): Promise<SelectParticipant[]> => {
   try {
     return await db
       .delete(participantsTable)
       .where(eq(participantsTable.conversationId, conversationId))
       .returning();
   } catch {
-    return [] as SelectParticipant[];
+    return [];
   }
 };

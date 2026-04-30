@@ -1,6 +1,6 @@
-import { Comment, CommentStatistic, ReactionType } from "../lib/definitions";
-import { API_FAKEBOOK_COMMENT_DELETE, API_FAKEBOOK_COMMENT_DETAIL, API_FAKEBOOK_COMMENT_REACT, API_FAKEBOOK_COMMENT_STATISTIC, API_FAKEBOOK_COMMENT_UPDATE, API_FAKEBOOK_POST_COMMENT_CREATE } from "../../../services/api-endpoints";
-import BaseService, { Response } from "../../../services/base.service";
+import { Comment, CommentStatistic, ReactionType } from "@/app/(module)/(md_fakebook)/lib/definitions";
+import { API_FAKEBOOK_COMMENT_DELETE, API_FAKEBOOK_COMMENT_DETAIL, API_FAKEBOOK_COMMENT_REACT, API_FAKEBOOK_COMMENT_STATISTIC, API_FAKEBOOK_COMMENT_UPDATE, API_FAKEBOOK_POST_COMMENT_CREATE } from "@/app/services/api-endpoints";
+import BaseService, { Response } from "@/app/services/base.service";
 
 class CommentService extends BaseService {
   constructor() {

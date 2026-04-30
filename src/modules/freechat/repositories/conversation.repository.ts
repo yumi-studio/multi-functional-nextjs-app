@@ -1,8 +1,8 @@
 import 'server-only';
 import { count, desc, eq, inArray, sql } from "drizzle-orm";
 
-import { db } from "../db";
-import { conversationsTable, InsertConversation, participantsTable, SelectConversation } from "../db/schema";
+import { db } from "@/modules/freechat/db";
+import { conversationsTable, InsertConversation, participantsTable, SelectConversation } from "@/modules/freechat/db/schema";
 import { PgSelectBuilder, PgSelectQueryBuilderBase, SelectedFields } from 'drizzle-orm/pg-core';
 
 type ConversationIdOnly = Pick<SelectConversation, "id">;

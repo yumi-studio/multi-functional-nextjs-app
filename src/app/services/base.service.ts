@@ -1,6 +1,6 @@
 "use client";
 
-import apiClient from "./api-client";
+import apiClient from "@/app/services/api-client";
 
 export type Response<T> = {
   success: boolean,

@@ -3,10 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 next dev --turbopack --experimental-https",
+    "dev": "cross-env NODE_ENV=development NODE_TLS_REJECT_UNAUTHORIZED=0 next dev --turbopack --experimental-https",
+    "dev:1": "dotenv -e .env.server1 -- cross-env NODE_ENV=development NODE_TLS_REJECT_UNAUTHORIZED=0 next dev --turbopack --experimental-https -p 3000",
+    "dev:2": "dotenv -e .env.server2 -- cross-env NODE_ENV=development NODE_TLS_REJECT_UNAUTHORIZED=0 next dev --turbopack --experimental-https -p 4000",
+    "dev:multi": "concurrently \"npm run dev:1\" \"npm run dev:2\"",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "freechat:migrate": "cross-env NODE_ENV=development npx drizzle-kit push --config=./src/modules/freechat/drizzle.config.ts",
+    "freechat:seed": "cross-env NODE_ENV=development npx tsx ./src/modules/freechat/db/seeds/index.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
@@ -29,6 +34,7 @@
     "framer-motion": "^12.34.3",
     "gapi-script": "^1.2.0",
     "idb": "^8.0.3",
+    "ioredis": "^5.10.1",
     "jose": "^6.2.2",
     "js-cookie": "^3.0.5",
     "lodash": "^4.18.1",
@@ -43,6 +49,7 @@
     "react-draggable": "^4.5.0",
     "react-player": "^3.4.0",
     "react-toastify": "^11.0.5",
+    "socket.io-client": "^4.8.3",
     "tailwind-merge": "^3.5.0",
     "underscore": "^1.13.7",
     "web-push": "^3.6.7",
@@ -59,6 +66,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/web-push": "^3.6.4",
+    "concurrently": "^9.2.1",
+    "dotenv-cli": "^11.0.0",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.0.10",

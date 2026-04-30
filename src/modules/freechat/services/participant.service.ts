@@ -1,10 +1,10 @@
-"use server";
-
+import 'server-only';
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../db";
-import { participantsTable, SelectParticipant } from "../db/schema";
-import * as participantRepository from "../repositories/participant.repository";
+import { db } from "@/modules/freechat/db";
+import { participantsTable, SelectParticipant } from "@/modules/freechat/db/schema";
+import * as participantRepository from "@/modules/freechat/repositories/participant.repository";
+import { cacheRead, cacheReadMultiple } from "@/modules/core/services/redis.service";
 
 export const changeParticipantNickname = async ({
   participantId,

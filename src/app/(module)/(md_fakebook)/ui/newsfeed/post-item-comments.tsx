@@ -1,16 +1,16 @@
 "use client";
 
-import { Comment, ReactionType } from "../../lib/definitions";
+import { Comment, ReactionType } from "@/app/(module)/(md_fakebook)/lib/definitions";
 import { SimpleDialog } from "@/app/ui/dialogs";
 import { faClose, faEllipsisVertical, faPenToSquare, faThumbsDown, faThumbsUp, faTrash, faUser, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Skeleton } from "@mui/material";
 import Image from "next/image";
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import PostCommentEditor from "./post-comment-editor";
-import { useFakebookStore } from "../../stores/fakebook-store";
-import { postService } from "../../services/post.service";
-import { commentService } from "../../services/comment.service";
+import PostCommentEditor from "@/app/(module)/(md_fakebook)/ui/newsfeed/post-comment-editor";
+import { useFakebookStore } from "@/app/(module)/(md_fakebook)/stores/fakebook-store";
+import { postService } from "@/app/(module)/(md_fakebook)/services/post.service";
+import { commentService } from "@/app/(module)/(md_fakebook)/services/comment.service";
 
 type PostCommentOptionsProp = {
   handleEdit: () => void;

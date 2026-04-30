@@ -1,8 +1,8 @@
 import { config } from 'dotenv';
-config({ path: '.env' });
+config({ path: '.env.development' });
 
-import seedConversations from "./conversations";
-import seedUsers from "./users";
+import seedConversations from "@/modules/freechat/db/seeds/conversations";
+import seedUsers from "@/modules/freechat/db/seeds/users";
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { exit } from 'process';
 

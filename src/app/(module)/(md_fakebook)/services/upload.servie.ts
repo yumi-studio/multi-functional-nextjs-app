@@ -1,6 +1,6 @@
-import { UploadMediaFile } from "../lib/definitions";
-import BaseService, { Response } from "../../../services/base.service";
-import { API_FAKEBOOK_UPLOADFILE } from "../../../services/api-endpoints";
+import { UploadMediaFile } from "@/app/(module)/(md_fakebook)/lib/definitions";
+import BaseService, { Response } from "@/app/services/base.service";
+import { API_FAKEBOOK_UPLOADFILE } from "@/app/services/api-endpoints";
 
 export type UploadMediaRequest = UploadMediaFile;
 export type UploadMediaResponse = {

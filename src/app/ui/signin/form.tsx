@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import SsoForm from "./sso-form";
+import SsoForm from "@/app/ui/signin/sso-form";
 import { useAppContext } from "@/app/context/AppContext";
 import { userService } from "@/app/services/user.service";
 

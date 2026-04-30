@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { useUserStore } from "@/app/stores/user-store";
-import { SIGNIN_URL } from "../lib/url_paths";
+import { SIGNIN_URL } from "@/app/lib/url_paths";
 
 export default function ProtectedRoute({
   children,

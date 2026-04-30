@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect } from "react"
 import { useUserStore } from "@/app/stores/user-store"
 import { userService } from "@/app/services/user.service";
-import { useAppContext } from "./AppContext";
+import { useAppContext } from "@/app/context/AppContext";
 
 type AuthContextType = {};
 

@@ -1,11 +1,12 @@
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { conversationsTable, messagesTable, participantsTable, usersTable } from '../schema';
+import { conversationsTable, messagesTable, participantsTable, usersTable } from '@/modules/freechat/db/schema';
 import { sql } from "drizzle-orm";
 import { seed } from 'drizzle-seed';
 
 export default async function seedConversations(db: PostgresJsDatabase) {
   await db.execute(sql`TRUNCATE TABLE ${conversationsTable}`);
   await db.execute(sql`TRUNCATE TABLE ${participantsTable}`);
+  await db.execute(sql`TRUNCATE TABLE ${messagesTable}`);
 
   // Create default channel
   await db.insert(conversationsTable).values({

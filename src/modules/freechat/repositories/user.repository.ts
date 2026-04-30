@@ -1,7 +1,7 @@
 import 'server-only';
 import { count, desc, eq, inArray } from "drizzle-orm";
-import { db } from "../db";
-import { InsertUser, SelectUser, usersTable } from "../db/schema";
+import { db } from "@/modules/freechat/db";
+import { InsertUser, SelectUser, usersTable } from "@/modules/freechat/db/schema";
 
 type UserIdOnly = Pick<SelectUser, "id">;
 type UpdateUser = Partial<Omit<InsertUser, "id" | "createdAt">>;
@@ -62,7 +62,12 @@ export const getByEmail = async (email: string) => {
   try {
     const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email)).limit(1);
     return user ?? null;
-  } catch {
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err)
+    } else {
+      console.error('Database error', err);
+    }
     return null;
   }
 };

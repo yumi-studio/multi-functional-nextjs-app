@@ -2,10 +2,10 @@
 
 import { and, eq, inArray } from "drizzle-orm";
 
-import { db } from "../db";
-import { conversationsTable, participantsTable, SelectConversation, SelectMessage, SelectParticipant } from "../db/schema";
-import * as conversationRepository from "../repositories/conversation.repository";
-import * as messageService from "./message.service";
+import { db } from "@/modules/freechat/db";
+import { conversationsTable, participantsTable, SelectConversation, SelectMessage, SelectParticipant } from "@/modules/freechat/db/schema";
+import * as conversationRepository from "@/modules/freechat/repositories/conversation.repository";
+import * as messageService from "@/modules/freechat/services/message.service";
 
 const normalizeUserIds = (userIds: string[]) => {
   return [...new Set(userIds.map((userId) => userId.trim()).filter(Boolean))];

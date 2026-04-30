@@ -8,10 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 import Image from "next/image";
 import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
-import { CircleIconButton } from "../../../ui/buttons";
+import { CircleIconButton } from "@/app/ui/buttons";
 import { useAppContext } from "@/app/context/AppContext";
-import { useFakebookStore } from "../stores/fakebook-store";
-import { profileService } from "../services/profile.service";
+import { useFakebookStore } from "@/app/(module)/(md_fakebook)/stores/fakebook-store";
+import { profileService } from "@/app/(module)/(md_fakebook)/services/profile.service";
 
 const navItemClass = "flex-auto shrink-0 flex flex-wrap items-end justify-center py-3 text-lg relative border-t-2 border-t-gray-300";
 const navItemActiveClass = "flex-auto shrink-0 flex flex-wrap items-end justify-center py-3 text-lg relative border-t-2 border-t-blue-600 bg-blue-100";

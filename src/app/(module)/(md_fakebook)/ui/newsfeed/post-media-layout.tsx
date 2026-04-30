@@ -3,7 +3,7 @@ import { faPlay, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 import Image from "next/image";
-import { PostMedia } from "../../lib/definitions";
+import { PostMedia } from "@/app/(module)/(md_fakebook)/lib/definitions";
 
 type LayoutProps = {
   items: PostMedia[];

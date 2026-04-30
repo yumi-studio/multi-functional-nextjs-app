@@ -1,18 +1,18 @@
 "use client";
 
-import { Post, ReactionType } from "../../lib/definitions";
+import { Post, ReactionType } from "@/app/(module)/(md_fakebook)/lib/definitions";
 import { faTrashCan, faPenToSquare, faFlag, faUser, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useLayoutEffect, useMemo, useState } from "react";
-import PostItemFooter from "./post-item-footer";
+import PostItemFooter from "@/app/(module)/(md_fakebook)/ui/newsfeed/post-item-footer";
 import { useAppContext } from "@/app/context/AppContext";
 import SimpleGalleryViewer, { GalleryItem } from "@/app/ui/simple-gallery-viewer"; 
-import PostMediaLayout from "./post-media-layout";
+import PostMediaLayout from "@/app/(module)/(md_fakebook)/ui/newsfeed/post-media-layout";
 import { formatDateTime } from "@/app/lib/utils";
-import { useFakebookStore } from "../../stores/fakebook-store";
-import { useFakebookContext } from "../../context/FakebookContext";
+import { useFakebookStore } from "@/app/(module)/(md_fakebook)/stores/fakebook-store";
+import { useFakebookContext } from "@/app/(module)/(md_fakebook)/context/FakebookContext";
 
 export type PostItemProp = {
   post: Post;

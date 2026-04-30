@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Flip, ToastContainer } from "react-toastify";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { APP_NAME } from "./lib/config";
+import { APP_NAME } from "@/app/lib/config";
 
 import "@/app/globals.css";
 import "@fontsource/roboto/300.css";

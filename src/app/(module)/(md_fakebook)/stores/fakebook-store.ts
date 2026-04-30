@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from 'zustand';
-import { Post, Profile } from '../lib/definitions';
+import { Post, Profile } from '@/app/(module)/(md_fakebook)/lib/definitions';
 
 export type FakebookState = {
   activeProfile: Profile | null,

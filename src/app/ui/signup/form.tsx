@@ -2,9 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import Complete from "./complete";
+import Complete from "@/app/ui/signup/complete";
 import { authService } from "@/app/services/auth.service";
-import { LinkButton, NormalButton } from "../buttons";
+import { LinkButton, NormalButton } from "@/app/ui/buttons";
 import { Link } from "@/i18n/navigation";
 import { SIGNIN_URL } from "@/app/lib/url_paths";
 

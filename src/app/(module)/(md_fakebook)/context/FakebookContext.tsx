@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { postService } from "../services/post.service";
-import { useFakebookStore } from "../stores/fakebook-store";
+import { postService } from "@/app/(module)/(md_fakebook)/services/post.service";
+import { useFakebookStore } from "@/app/(module)/(md_fakebook)/stores/fakebook-store";
 
 type FakebookContextType = {
   actionDeletePost: (id: string) => Promise<void>;

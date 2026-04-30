@@ -1,10 +1,10 @@
 import {
   Comment, Post, PostMedia, PostStatistic, PostVisibility, ReactionType, UploadMediaFile
-} from "../lib/definitions";
-import BaseService, { Response } from "../../../services/base.service";
+} from "@/app/(module)/(md_fakebook)/lib/definitions";
+import BaseService, { Response } from "@/app/services/base.service";
 import {
   API_FAKEBOOK_POST_COMMENT, API_FAKEBOOK_POST_COMMENT_CREATE, API_FAKEBOOK_POST_CREATE, API_FAKEBOOK_POST_DELETE, API_FAKEBOOK_POST_DETAIL, API_FAKEBOOK_POST_LIST, API_FAKEBOOK_POST_REACT, API_FAKEBOOK_POST_STATISTIC
-} from "../../../services/api-endpoints";
+} from "@/app/services/api-endpoints";
 
 export type CreatePostRequest = {
   content: string;

@@ -1,6 +1,6 @@
-import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../lib/definitions";
-import { API_AUTH_EXTERNAL_PROVIDERS, API_AUTH_LOGIN, API_AUTH_LOGOUT, API_AUTH_REGISTER } from "./api-endpoints";
-import BaseService, { Response } from "./base.service";
+import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "@/app/lib/definitions";
+import { API_AUTH_EXTERNAL_PROVIDERS, API_AUTH_LOGIN, API_AUTH_LOGOUT, API_AUTH_REGISTER } from "@/app/services/api-endpoints";
+import BaseService, { Response } from "@/app/services/base.service";
 
 class AuthService extends BaseService {
   constructor() {

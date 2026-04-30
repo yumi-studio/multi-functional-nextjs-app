@@ -1,9 +1,8 @@
-"use server";
-
-import * as messageRepository from "../repositories/message.repository";
-import * as participantRepository from "../repositories/participant.repository";
-import * as conversationRepository from "../repositories/conversation.repository";
-import { SelectMessage } from "../db/schema";
+import 'server-only';
+import * as messageRepository from "@/modules/freechat/repositories/message.repository";
+import * as participantRepository from "@/modules/freechat/repositories/participant.repository";
+import * as conversationRepository from "@/modules/freechat/repositories/conversation.repository";
+import { SelectMessage } from "@/modules/freechat/db/schema";
 
 export const createMessage = async ({
   conversationId,

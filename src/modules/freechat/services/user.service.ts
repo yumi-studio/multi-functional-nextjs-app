@@ -1,20 +1,27 @@
 import 'server-only';
 import bcrypt from 'bcrypt';
-import fp from 'lodash/fp';
-import * as userRepository from "../repositories/user.repository";
-import * as conversationRepository from "../repositories/conversation.repository";
-import { SelectUser } from '../db/schema';
+import { omit } from 'lodash';
+import * as userRepository from "@/modules/freechat/repositories/user.repository";
+import { SelectUser } from '@/modules/freechat/db/schema';
+import { PASSWORD_ENCRYPT_SALT } from '@/modules/freechat/shared/constants';
+import { User } from '@/modules/freechat/shared/types';
 
-const PASSWORD_ENCRYPT_SALT = parseInt(`${process.env.FREECHAT_PASSWORD_ENCRYPT_SALT ?? 10}`);
+export const encryptPassword = async (password: string) => {
+  return await bcrypt.hash(password, PASSWORD_ENCRYPT_SALT);
+}
 
-type User = Omit<SelectUser, 'passwordHash'>
+export const comparePassword = async (password: string, hash: string) => {
+  return await bcrypt.compare(password, hash);
+}
 
 export const registerUser = async ({
   email, display_name, password
 }: {
-  email: string, display_name: string, password: string
-}) => {
-  const hashedPassword = await bcrypt.hash(password, PASSWORD_ENCRYPT_SALT);
+  email: string;
+  display_name: string;
+  password: string
+}): Promise<string | null> => {
+  const hashedPassword = await encryptPassword(password);
   const newUserId = await userRepository.createOne({
     email: email,
     displayName: display_name,
@@ -23,8 +30,8 @@ export const registerUser = async ({
   return newUserId;
 }
 
-const safeParseUser = (user: SelectUser) => {
-  return fp.omit('passwordHash')(user) as User;
+const safeParseUser = (user: SelectUser): User => {
+  return omit(user, ['passwordHash']);
 }
 
 export const fetchAllUsers = async () => {
@@ -38,8 +45,9 @@ export const fetchUserByEmail = async (email: string) => {
       return safeParseUser(user);
     }
   } catch (error) {
-    return null;
+
   }
+  return null;
 }
 
 export const fetchUserById = async (id: string) => {
@@ -49,6 +57,7 @@ export const fetchUserById = async (id: string) => {
       return safeParseUser(user);
     }
   } catch (error) {
-    return null;
+
   }
+  return null;
 }
