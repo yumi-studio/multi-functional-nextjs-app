@@ -1,0 +1,50 @@
+/* freechat.module.css */
+
+.theme {
+  /* cho browser biết hỗ trợ cả 2 */
+  color-scheme: light dark;
+
+  /* ===== LIGHT (default) ===== */
+  --fc-background: #f9fafb;
+
+  --fc-surface: #ffffff;
+  --fc-surface-muted: #f3f4f6;
+  --fc-border: #e5e7eb;
+
+  --fc-primary: #2563eb;
+  --fc-primary-hover: #1d4ed8;
+
+  --fc-text-primary: #111827;
+  --fc-text-secondary: #6b7280;
+
+  --fc-message-user-bg: #2563eb;
+  --fc-message-user-text: #ffffff;
+
+  --fc-message-bot-bg: #f3f4f6;
+  --fc-message-bot-text: #111827;
+
+  color: var(--fc-text-primary);
+}
+
+/* ===== DARK override ===== */
+@media (prefers-color-scheme: dark) {
+  .theme {
+    --fc-background: #0b0f19;
+
+    --fc-surface: #111827;
+    --fc-surface-muted: #1f2937;
+    --fc-border: #374151;
+
+    --fc-primary: #3b82f6;
+    --fc-primary-hover: #2563eb;
+
+    --fc-text-primary: #f9fafb;
+    --fc-text-secondary: #9ca3af;
+
+    --fc-message-user-bg: #2563eb;
+    --fc-message-user-text: #ffffff;
+
+    --fc-message-bot-bg: #1f2937;
+    --fc-message-bot-text: #f9fafb;
+  }
+}

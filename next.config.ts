@@ -58,7 +58,7 @@ const nextConfig: NextConfig = {
       },
     ]
   },
-  // reactStrictMode: false
+  reactStrictMode: true
 };
 
 const withNextIntl = createNextIntlPlugin();

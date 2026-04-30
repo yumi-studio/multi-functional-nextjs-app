@@ -1,20 +1,24 @@
 "use client";
 
-import { useEffect } from "react";
-import NoAuth from "./no-auth";
+import { useEffect, useState } from "react";
+import { useRouter } from "@/i18n/navigation";
 import { useUserStore } from "@/app/stores/user-store";
-import { useAppContext } from "../context/AppContext";
+import { SIGNIN_URL } from "@/app/lib/url_paths";
 
 export default function ProtectedRoute({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const userLoading = useUserStore(state => state.userLoading);
   const userDetail = useUserStore(state => state.userDetail);
+  const router = useRouter();
 
-  if (!userDetail) {
-    return <NoAuth />;
-  }
+  useEffect(() => {
+    if (!userLoading && !userDetail) {
+      router.push(SIGNIN_URL);
+    }
+  }, [userDetail, userLoading]);
 
   return children;
 }

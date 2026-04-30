@@ -2,7 +2,7 @@
 
 import { UserDetail } from "@/app/lib/definitions";
 import BaseService, { Response } from "@/app/services/base.service";
-import { API_USER_ME } from "./api-endpoints";
+import { API_USER_ME } from "@/app/services/api-endpoints";
 
 class UserService extends BaseService {
   constructor() {
